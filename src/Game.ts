@@ -272,10 +272,7 @@ class Game extends egret.Sprite {
                 display.x = Utils.extentEC(boxBody.position[0]);
                 display.y = Utils.extentEC(boxBody.position[1]);
                 display.rotation = boxBody.angle * 180 / Math.PI;
-                if (boxBody.displayName === '左臂'){
-                    console.log(boxBody.position[0])
-                    console.log(display.x,leftLeg.x)
-                }
+                
                 //碰撞检测处于睡眠状态时加半透明标志一下
                 if (this.debug) {
                     if (boxBody.sleepState === p2.Body.SLEEPING) {
