@@ -23,11 +23,13 @@ function getOpenidByCode(code, callback) {
         param: code
     }).then(function (ret) {
         if (ret.code !== 0) {
-            alert(ret.message);
+            Utils.toast(ret.message);
         }
-        callback(ret);
+        else {
+            callback(ret);
+        }
     }).catch(function (e) {
-        callback(e);
+        Utils.toast(JSON.stringify(e));
     });
 }
 // 请求openID
@@ -51,16 +53,11 @@ function requireOpenIdFromWeb(callback) {
         storage.local.remove('_openid');
         debug('requireOpenId...');
         getOpenidByCode(codeFromUrl, function (retStr) {
-            if (typeof retStr.code === 'number' && retStr.code === 0) {
-                var message = JSON.parse(retStr["message"]);
-                var wxopenid = message["openid"];
-                storage.local.set("_openid", wxopenid);
-                storage.local.set("_code", codeFromUrl);
-                callback();
-            }
-            else {
-                Utils.toast(JSON.stringify(retStr));
-            }
+            var message = JSON.parse(retStr["message"]);
+            var wxopenid = message["openid"];
+            storage.local.set("_openid", wxopenid);
+            storage.local.set("_code", codeFromUrl);
+            callback();
         });
     }
     else {
@@ -71,16 +68,11 @@ function requireOpenIdFromMiniGame(callback) {
     platform.login().then(function (res) {
         if (res.code) {
             getOpenidByCode(res.code, function (retStr) {
-                if (typeof retStr.code === 'number' && retStr.code === 0) {
-                    var message = JSON.parse(retStr["message"]);
-                    var wxopenid = message["openid"];
-                    storage.local.set("_openid", wxopenid);
-                    storage.local.set("_code", res.code);
-                    callback();
-                }
-                else {
-                    Utils.toast(JSON.stringify(retStr));
-                }
+                var message = JSON.parse(retStr["message"]);
+                var wxopenid = message["openid"];
+                storage.local.set("_openid", wxopenid);
+                storage.local.set("_code", res.code);
+                callback();
             });
         }
         else {
@@ -160,7 +152,7 @@ function requireUserAuth(callback, needRefetch) {
         }).then(function (ret) {
             if (ret.error !== 0) {
                 var user = storage.local.get("user") || {};
-                alert('用户凭证获取出错 error:' + ret.error + ", " + "userID:" + user.ID);
+                Utils.toast('用户凭证获取出错 error:' + ret.error + ", " + "userID:" + user.ID);
                 debug(ret.errorHint);
             }
             else {
@@ -168,7 +160,7 @@ function requireUserAuth(callback, needRefetch) {
                 callback();
             }
         }, function (xhr) {
-            alert("用户凭证获取失败 status:" + xhr.status + ", sessionid: " + _sessionid);
+            Utils.toast("用户凭证获取失败 status:" + xhr.status + ", sessionid: " + _sessionid);
         });
     }
     else {

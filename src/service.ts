@@ -1,4 +1,4 @@
-const URL_HOST = 'http://dev.withwheat.wang:8082/h5/user';
+const URL_HOST = 'https://dev.withwheat.wang/silo/h5/';
 let count = 0;
 module service {
     export class common {

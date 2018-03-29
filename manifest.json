@@ -10,7 +10,7 @@
 	],
 	"game": [
 		"bin-debug/Utils.js",
-		"bin-debug/Main.js",
+		"bin-debug/auth.js",
 		"bin-debug/AwardItem.js",
 		"bin-debug/Button.js",
 		"bin-debug/config.js",
@@ -19,7 +19,7 @@
 		"bin-debug/Hooker.js",
 		"bin-debug/Http.js",
 		"bin-debug/LoadingUI.js",
-		"bin-debug/auth.js",
+		"bin-debug/AwardDlg.js",
 		"bin-debug/Noticer.js",
 		"bin-debug/Platform.js",
 		"bin-debug/PointDlg.js",
@@ -29,6 +29,6 @@
 		"bin-debug/service.js",
 		"bin-debug/storage.js",
 		"bin-debug/Timer.js",
-		"bin-debug/AwardDlg.js"
+		"bin-debug/Main.js"
 	]
 }

@@ -9,7 +9,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
-var URL_HOST = 'http://dev.withwheat.wang:8082/h5/user';
+var URL_HOST = 'https://dev.withwheat.wang/silo/h5/';
 var count = 0;
 var service;
 (function (service) {

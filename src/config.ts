@@ -74,7 +74,7 @@ var URLObj = {
 
   for (var i in URLObj) {
     if (typeof URLObj[i] === 'string') {
-      URLObj[i] = URLObj[i].replace(/\{hostname\}/g, hostname).replace("{uname}", uname).replace("{appid}", isLocal ? APPID_MAP.default : APPID_MAP[uname]);
+      URLObj[i] = URLObj[i].replace(/\{hostname\}/g, 'www.zaofans.com').replace("{uname}", uname).replace("{appid}", isLocal ? APPID_MAP.default : APPID_MAP[uname]);
     }
   }
 
