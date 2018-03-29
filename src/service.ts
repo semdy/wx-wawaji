@@ -1,14 +1,13 @@
-const URL_HOST = 'https://dev.withwheat.wang/silo/h5/';
-let count = 0;
 module service {
     export class common {
+        private static URL_HOST = 'https://dev.withwheat.wang/silo/h5/';
         public static doRequest(url: string, data: object, sucFun: Function, errFun: Function): void {
-            Http.post(`${URL_HOST}${url}.json`, { auth: user.getAuthToken(), ...data }, { processData: false }).then((res) => {
+            Http.post(`${common.URL_HOST}${url}.json`, { auth: user.getAuthToken(), ...data }, { processData: false }).then((res) => {
                 if (res.protocError === 0) {
                     sucFun(res);
                 } else {
                     if (res.protocError > 700 && res.protocError < 800) { //auth过期重新刷auth接口
-                        refreshUserAuth(function () {
+                        auth.refreshUserAuth(function () {
                             common.doRequest(url, data, sucFun, errFun);
                         });
                     } else {

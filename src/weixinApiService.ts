@@ -1,30 +1,30 @@
-;(function(window, undefined){
+var weixinApiService = (function(){
 
-  var needApiNames = ['onMenuShareAppMessage','onMenuShareTimeline','hideOptionMenu',
+  const needApiNames: Array<string> = ['onMenuShareAppMessage','onMenuShareTimeline','hideOptionMenu',
     'showOptionMenu','scanQRCode','getLocation', 'chooseImage', 'uploadImage', 'previewImage'];
 
-  var getQueryString = function(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-    var r = window.location.search.substr(1).match(reg);
+  const getQueryString = function(name: string): any {
+    let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    let r = window.location.search.substr(1).match(reg);
     if (r !== null) return unescape(r[2]); return null;
   }
 
-  var getPrivilegeParams = {
+  let getPrivilegeParams = {
     param: window.location.href.split('#')[0],
     uname : getQueryString("uname") || 'zaofans',
     type : 'getJSSDKSign',
     __zaofans : true
   };
 
-  var invokeQueue = [];
-  var isWxReady = false;
-  var configErrMsg = '';
+  let invokeQueue = [];
+  let isWxReady = false;
+  let configErrMsg = '';
 
-  var debug = function(msg){
+  let debug = function(msg){
     console.info(msg);
   };
 
-  var triggerReady = function(){
+  let triggerReady = function(){
     for(var i=0; i<invokeQueue.length; i++){
       if( typeof invokeQueue[i] === 'function' ){
         invokeQueue[i]();
@@ -39,7 +39,7 @@
    * 从远程获取微信api权限config
    * @returns {*|r.promise|Function|promise}
    */
-  var getWeixinApiPrivilege = function(){
+  let getWeixinApiPrivilege = function(){
     return new Promise(function(resolve, reject){
       Http.post(URLObj.weixinapiURL, getPrivilegeParams).then(function(retData){
         var code = retData.code;
@@ -84,7 +84,7 @@
    * @param apiName api名称
    * @param params 参数数组
    */
-  var callWeixinApi =function(apiName,params, deferred){
+  var callWeixinApi =function(apiName: string, params?: object, deferred?: any){
     var args = [].slice.call(arguments, 1);
     var defer = deferred || new Promise(function(resolve, reject){
       if( configErrMsg ) reject(configErrMsg);
@@ -151,7 +151,7 @@
     }
   };
 
-  window.weixinApiService = {
+  return {
     getWeixinApiPrivilege : getWeixinApiPrivilege,
     exec : exec,
     config : config,
@@ -160,4 +160,4 @@
     authorize: authorize
   };
 
-}(window));
+})();

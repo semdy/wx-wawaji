@@ -9,21 +9,19 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
-var URL_HOST = 'https://dev.withwheat.wang/silo/h5/';
-var count = 0;
 var service;
 (function (service) {
     var common = (function () {
         function common() {
         }
         common.doRequest = function (url, data, sucFun, errFun) {
-            Http.post("" + URL_HOST + url + ".json", __assign({ auth: user.getAuthToken() }, data), { processData: false }).then(function (res) {
+            Http.post("" + common.URL_HOST + url + ".json", __assign({ auth: user.getAuthToken() }, data), { processData: false }).then(function (res) {
                 if (res.protocError === 0) {
                     sucFun(res);
                 }
                 else {
                     if (res.protocError > 700 && res.protocError < 800) {
-                        refreshUserAuth(function () {
+                        auth.refreshUserAuth(function () {
                             common.doRequest(url, data, sucFun, errFun);
                         });
                     }
@@ -44,6 +42,7 @@ var service;
                 common.doRequest(url, data, resolve, reject);
             });
         };
+        common.URL_HOST = 'https://dev.withwheat.wang/silo/h5/';
         return common;
     }());
     service.common = common;

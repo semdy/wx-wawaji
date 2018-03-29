@@ -28,27 +28,28 @@ interface APPID_MAP {
   joyseed?: string
 }
 
-var URLObj = {
-  urlHost: "http://{hostname}/zaofans_wheat",
-  siloHost: "http://it.zaofans.com/silo/debug",
-  shareUrl: "http://{hostname}/OrderUI-wheat/activity/activitys/annual-report",
-  weixinapiURL: "http://{hostname}/weixin_wheat/open-api",
-  weixinAuthUser : "https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2F{hostname}%2FOrderUI-wheat%2Factivity%2Factivitys%2Fannual-report%2Findex.html?uname={uname}&response_type=code&scope=snsapi_base&state=123456#wechat_redirect",
-  Config: {
-    urls: {
-      userinfo: '/usercenter/user/info',
-      buyrecord: '/user/buy/record/get',
-      shareReward: '/user/reward/share/151',
-      authToken: '/silo/user/auth/create',
-      sourceUrl: 'http://edm.mcake.com/shuxy/2017/annual-report',
-      shareIcon: 'http://edm.mcake.com/shuxy/2017/annual-report/resource/assets/shareIcon.png'
-    },
-    uname: 'zaofans',
-    useCache: true
-  }
-};
+var URLObj = (function () {
+  var URLObj = {
+    urlHost: "http://{hostname}/zaofans_wheat",
+    siloHost: "http://it.zaofans.com/silo/debug",
+    shareUrl: "http://{hostname}/OrderUI-wheat/activity/activitys/annual-report",
+    weixinapiURL: "http://{hostname}/weixin_wheat/open-api",
+    weixinAuthUser: "https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2F{hostname}%2FOrderUI-wheat%2Factivity%2Factivitys%2Fannual-report%2Findex.html?uname={uname}&response_type=code&scope=snsapi_base&state=123456#wechat_redirect",
+    Config: {
+      urls: {
+        userinfo: '/usercenter/user/info',
+        buyrecord: '/user/buy/record/get',
+        shareReward: '/user/reward/share/151',
+        authToken: '/silo/user/auth/create',
+        sourceUrl: 'http://edm.mcake.com/shuxy/2017/annual-report',
+        shareIcon: 'http://edm.mcake.com/shuxy/2017/annual-report/resource/assets/shareIcon.png'
+      },
+      uname: 'zaofans',
+      useCache: true
+    }
+  };
 
-(function(){
+
   var isLocal: boolean = false;
   var hostname: string = location.hostname;
   var uname: string = Utils.getQueryString('uname') || 'zaofans';
@@ -79,10 +80,12 @@ var URLObj = {
   }
 
   URLObj.Config.uname = uname;
-  for(let i in URLObj.Config.urls) {
+  for (let i in URLObj.Config.urls) {
     URLObj.Config.urls[i] = URLObj.urlHost + URLObj.Config.urls[i];
   }
 
   //localStorage.setItem("wx_uname", uname);
   //localStorage.setItem(uname + ":_openid", 'oO--NtwPrwXr0t02BvublP9wIu9Y');
+  
+  return URLObj;
 })();

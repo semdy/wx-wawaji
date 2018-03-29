@@ -1,3 +1,4 @@
+var storage = (function () {
   var isLocalStorageSupported: boolean = function () {
     var testKey = 'test', storage = window.localStorage;
     try {
@@ -43,7 +44,7 @@
 
       key = getKey(key);
 
-      options = {...this.defaults, ...options};
+      options = { ...this.defaults, ...options };
 
       if (value === null || value === "") {
         options.expires = -1;
@@ -104,13 +105,13 @@
       var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
       if (keys) {
         for (var i = keys.length; i--;) {
-          if( clearAll || decode(keys[i]).split(":")[0] === STORAGE_KEY )
+          if (clearAll || decode(keys[i]).split(":")[0] === STORAGE_KEY)
             document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString();
         }
       }
     },
-    length: function(isAll?: boolean): number{
-      if( isAll ) {
+    length: function (isAll?: boolean): number {
+      if (isAll) {
         return document.cookie.length;
       } else {
         var keys: Array<string> = document.cookie.match(/[^ =;]+(?=\=)/g);
@@ -162,11 +163,11 @@
     },
     clear: function (clearAll?: boolean): void {
       if (isLocalStorageSupported) {
-        if( clearAll ) {
+        if (clearAll) {
           window.localStorage.clear();
         } else {
-          Object.keys(window.localStorage).forEach(function(key){
-            if( key.split(":")[0] === STORAGE_KEY ) {
+          Object.keys(window.localStorage).forEach(function (key) {
+            if (key.split(":")[0] === STORAGE_KEY) {
               window.localStorage.removeItem(key);
             }
           });
@@ -175,11 +176,11 @@
         Cookie.clear(clearAll);
       }
     },
-    length: function(isAll?: boolean): number{
-      if( isAll ) {
+    length: function (isAll?: boolean): number {
+      if (isAll) {
         return window.localStorage.length;
       } else {
-        return Object.keys(window.localStorage).filter(function(key){
+        return Object.keys(window.localStorage).filter(function (key) {
           return key.split(":")[0] === STORAGE_KEY;
         }).length;
       }
@@ -226,11 +227,11 @@
     },
     clear: function (clearAll?: boolean): void {
       if (isLocalStorageSupported) {
-        if( clearAll ) {
+        if (clearAll) {
           window.sessionStorage.clear();
         } else {
-          Object.keys(window.sessionStorage).forEach(function(key){
-            if( key.split(":")[0] === STORAGE_KEY )
+          Object.keys(window.sessionStorage).forEach(function (key) {
+            if (key.split(":")[0] === STORAGE_KEY)
               window.sessionStorage.removeItem(key);
           });
         }
@@ -238,19 +239,21 @@
         Cookie.clear(clearAll);
       }
     },
-    length: function(isAll?: boolean): number{
-      if( isAll ) {
+    length: function (isAll?: boolean): number {
+      if (isAll) {
         return window.sessionStorage.length;
       } else {
-        return Object.keys(window.sessionStorage).filter(function(key){
+        return Object.keys(window.sessionStorage).filter(function (key) {
           return key.split(":")[0] === STORAGE_KEY;
         }).length;
       }
     }
   };
 
-var storage = {
-  cookie: Cookie,
-  local: LocalStorage,
-  session: SessionStorage
-}
+  return {
+    cookie: Cookie,
+    local: LocalStorage,
+    session: SessionStorage
+  }
+  
+})();
