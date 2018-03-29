@@ -6,11 +6,11 @@ var weixinApiService = (function(){
   const getQueryString = function(name: string): any {
     let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
     let r = window.location.search.substr(1).match(reg);
-    if (r !== null) return unescape(r[2]); return null;
+    if (r !== null) return decodeURIComponent(r[2]); return null;
   }
 
   let getPrivilegeParams = {
-    param: window.location.href.split('#')[0],
+    param: encodeURIComponent(window.location.href.split('#')[0]),
     uname : getQueryString("uname") || 'zaofans',
     type : 'getJSSDKSign',
     __zaofans : true

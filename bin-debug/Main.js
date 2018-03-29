@@ -178,7 +178,7 @@ var Main = (function (_super) {
             weixinApiService.authorize();
             weixinApiService.exec('onMenuShareTimeline', {
                 title: '原麦山丘四周年，邀你一起领福利！',
-                link: URLObj.shareUrl + '/share.html?uname=' + URLObj.Config.uname + '&openid=' + this.getOpenid(),
+                link: URLObj.shareUrl + "/share.html?redirectUri=" + encodeURIComponent(URLObj.weixinAuthUser),
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function (res) {
                 },
@@ -191,7 +191,7 @@ var Main = (function (_super) {
             weixinApiService.exec('onMenuShareAppMessage', {
                 title: '原麦山丘四周年，邀你一起领福利！',
                 desc: '这台时光机，只想与你分享！',
-                link: URLObj.shareUrl + '/share.html?uname=' + URLObj.Config.uname + '&openid=' + this.getOpenid(),
+                link: URLObj.shareUrl + "/share.html?redirectUri=" + encodeURIComponent(URLObj.weixinAuthUser),
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function () {
                 },

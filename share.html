@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+</head>
+
+<body>
+  <script>
+    function getQueryString(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+      var r = window.location.search.substr(1).match(reg);
+      if (r !== null) return decodeURIComponent(r[2]);
+      return null;
+    }
+    var redirect_uri = getQueryString("redirectUri");
+    if (location.hostname === 'wx.withwheat.com') {
+      redirect_uri = redirect_uri.replace("OrderUI-wheat", "OrderUI");
+    }
+    location.replace(redirect_uri);
+  </script>
+</body>
+
+</html>

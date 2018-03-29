@@ -54,6 +54,12 @@ var PrizeDlg = (function (_super) {
             prizeItem.y = 110 * i;
             spr.addChild(prizeItem);
         });
+        //画一个透明的矩形，以处理scrollview空白区域无法拖动的问题
+        var rect = new egret.Shape();
+        rect.graphics.beginFill(0x000000, 0);
+        rect.graphics.drawRect(0, 0, this.scrollView.width, 110 * this.dataList.length);
+        rect.graphics.endFill();
+        spr.addChild(rect);
         this.scrollView.setContent(spr);
     };
     return PrizeDlg;
