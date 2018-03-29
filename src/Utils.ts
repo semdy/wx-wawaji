@@ -41,4 +41,36 @@ class Utils {
         }
         return val;
     };
+
+    public static getQueryString(name: string): string {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r !== null) return unescape(r[2]); return null;
+    }
+
+    public static toast(msg: string): void {
+        if (wx.showToast) {
+            wx.showToast({title: msg});
+        } else {
+            console.error(msg);
+        }
+    }
+
+    public static isWeiXin(): boolean {
+        var ua = window.navigator.userAgent;
+        if (/MicroMessenger/.test(ua)) {
+          return true;
+        } else {
+          return false;
+        }
+    }
+    
+    public static  isMiniGame(): boolean {
+        var ua = window.navigator.userAgent;
+        if (/MicroMessenger\/[\d.\d]+ MiniGame/.test(ua)) {
+          return true;
+        } else {
+          return false;
+        }
+    }
 }

@@ -16,7 +16,7 @@ var Hooker = (function (_super) {
         var _this = _super.call(this) || this;
         _this.x = x;
         _this.y = y;
-        _this._canMove = true;
+        _this._canMove = false;
         _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
         return _this;
     }
@@ -45,7 +45,8 @@ var Hooker = (function (_super) {
         var _this = this;
         this.dispatchEvent(new egret.Event('godown'));
         egret.Tween.get(this.paws).to({ y: 380 }, 3000).call(function () {
-            setTimeout(function () { return _this.goUp(); }, 800);
+            _this.dispatchEvent(new egret.Event('reachdown'));
+            //setTimeout(() => this.goUp(), 800);
         });
         this.openLegs();
     };
@@ -54,15 +55,13 @@ var Hooker = (function (_super) {
         this.dispatchEvent(new egret.Event('close'));
         this.closeLegs(function () {
             _this.dispatchEvent(new egret.Event('goup'));
-            egret.Tween.get(_this.paws).to({ y: 0 }, 3000).call(function () {
+            egret.Tween.get(_this.paws).to({ y: 0 }, 3000).wait(300).call(function () {
                 _this.dispatchEvent(new egret.Event('reachup'));
             });
         });
     };
     Hooker.prototype.stop = function () {
-        var _this = this;
         egret.Tween.removeTweens(this.paws);
-        setTimeout(function () { return _this.goUp(); }, 800);
     };
     Hooker.prototype.openLegs = function () {
         egret.Tween.get(this.leftLeg).to({ vx: -30, rotation: 30 }, 1200);
@@ -71,6 +70,12 @@ var Hooker = (function (_super) {
     Hooker.prototype.closeLegs = function (callback) {
         egret.Tween.get(this.leftLeg).to({ vx: 0, rotation: 0 }, 1200);
         egret.Tween.get(this.rightLeg).to({ vx: 0, vy: 0, rotation: 0 }, 1200).call(callback, this);
+    };
+    Hooker.prototype.disable = function () {
+        this._canMove = false;
+    };
+    Hooker.prototype.enable = function () {
+        this._canMove = true;
     };
     Hooker.prototype.initEvents = function () {
         var _this = this;
@@ -83,9 +88,9 @@ var Hooker = (function (_super) {
                 if (!isLeft) {
                     this.x -= 2;
                 }
-                if (this.x > 490) {
+                if (this.x > 482) {
                     isLeft = false;
-                    this.x = 490;
+                    this.x = 482;
                 }
                 if (this.x <= 0) {
                     isLeft = true;
@@ -94,10 +99,10 @@ var Hooker = (function (_super) {
             }
         }, this);
         this.addEventListener("startGame", function (e) {
-            _this._canMove = false;
+            _this.disable();
         }, this);
         this.addEventListener("reStartGame", function (e) {
-            _this._canMove = true;
+            _this.enable();
         }, this);
         /* this.stage.touchEnabled = true;
          this.stage.on("touchstart", function(e){

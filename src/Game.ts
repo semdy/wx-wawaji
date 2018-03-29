@@ -1,3 +1,9 @@
+
+interface breadArg {
+    resId: string,
+    bundleId: string
+}
+
 class Game extends egret.Sprite {
 
     private debug: boolean;
@@ -10,6 +16,7 @@ class Game extends egret.Sprite {
     private isCollision: boolean;
     private target: any;
     private _boxStack: Array<p2.Body>;
+    private award: Array<object>;
 
     public constructor(x: number = 0, y: number = 0) {
         super();
@@ -61,24 +68,30 @@ class Game extends egret.Sprite {
     public reStart(): void {
         this.isCollision = false;
         this.target = null;
+        this.award = [];
 
-        let breadArgs: Array<object> = [
-            {resId: "bread01_png", bundleId: 1}, {resId: "bread02_png", bundleId: 2},
-            {resId: "bread03_png", bundleId: 3}, {resId: "bread04_png", bundleId: 4},
-            {resId: "bread05_png", bundleId: 5}, {resId: "bread06_png", bundleId: 6},
-            {resId: "bread07_png", bundleId: 7}, {resId: "bread08_png", bundleId: 8},
-            {resId: "bread09_png", bundleId: 9}, {resId: "bread10_png", bundleId: 10}
+        this.removeConstraint();
+
+        let breadArgs: Array<breadArg> = [
+            { resId: "bread01_png", bundleId: 'bread01' }, { resId: "bread02_png", bundleId: 'bread02' },
+            { resId: "bread03_png", bundleId: 'bread03' }, { resId: "bread04_png", bundleId: 'bread04' },
+            { resId: "bread05_png", bundleId: 'bread05' }, { resId: "bread06_png", bundleId: 'bread06' },
+            { resId: "bread07_png", bundleId: 'bread07' }, { resId: "bread08_png", bundleId: 'bread08' },
+            { resId: "bread09_png", bundleId: 'bread09' }, { resId: "bread10_png", bundleId: 'bread10' }
         ];
 
         this.clearBodies();
 
-        breadArgs.forEach((arg, i) => {
+        breadArgs.forEach((arg: breadArg, i: number) => {
             setTimeout(() => {
-                this._boxStack.push(this.createBread(arg, Utils.range(100,500)));
+                this._boxStack.push(this.createBread(arg, Utils.range(100, 500)));
             }, i * 100);
         });
 
-        this.hooker.dispatchEvent(new egret.Event('reStartGame'));
+        //待所有面包都掉落了再移动抓子
+        setTimeout(() => {
+            this.hooker.dispatchEvent(new egret.Event('reStartGame'));
+        }, 2000);
     }
 
     private createConstraintBody(): void {
@@ -164,7 +177,7 @@ class Game extends egret.Sprite {
         return concaveBody;
     }
 
-    private createBread(arg: object, startX: number = 0, mass: number = 2): p2.Body {
+    private createBread(arg: breadArg, startX: number = 0, mass: number = 2): p2.Body {
 
         //添加长方形刚体的显示对象
         let display: egret.Bitmap = Utils.createBitmapByName(arg.resId);
@@ -175,7 +188,7 @@ class Game extends egret.Sprite {
         let startY = -display.height;
 
         display.x = display.width / 2;
-        display.y =  startY + display.height / 2;
+        display.y = startY + display.height / 2;
         display.anchorOffsetX = display.width / 2;
         display.anchorOffsetY = display.height / 2;
 
@@ -205,8 +218,8 @@ class Game extends egret.Sprite {
             }
         );
 
-        boxBody['displayName'] = display.name;
-        boxBody['bundleId'] = arg['bundleId'];
+        boxBody['displayName'] = arg.resId;
+        boxBody['bundleId'] = arg.bundleId;
         boxBody.addShape(boxShape);
         this.world.addBody(boxBody);
         //同步display对象和p2对象
@@ -272,7 +285,7 @@ class Game extends egret.Sprite {
                 display.x = Utils.extentEC(boxBody.position[0]);
                 display.y = Utils.extentEC(boxBody.position[1]);
                 display.rotation = boxBody.angle * 180 / Math.PI;
-                
+
                 //碰撞检测处于睡眠状态时加半透明标志一下
                 if (this.debug) {
                     if (boxBody.sleepState === p2.Body.SLEEPING) {
@@ -299,11 +312,40 @@ class Game extends egret.Sprite {
         this.mouseConstraint = null;
     }
 
-    private showResult(target): void {
+    private release(): void {
+        this.removeConstraint();
+        this.removePaws();
+    }
+
+    private showResult(target: any): void {
         if (target) {
             console.log(target.displayName, target.bundleId);
         } else {
             console.log('未抓到任何面包');
+        }
+        if (this.award.length > 0) {
+            this.parent.showAward(this.award);
+        } else {
+            this.parent.showFail();
+        }
+    }
+
+    private async getGameResult(target: any): Promise<any> {
+        let res = await service.game.result(target ? target.bundleId : "");
+        this.award = res.income || [];
+        this.hooker.goUp();
+        //如果有抓中
+        if (target) {
+            //如果没有中奖，则给个概率是在底部释放还是抓子升起一半时释放
+            if (this.award.length === 0) {
+                if (Math.random() > .2) {
+                    setTimeout(() => {
+                        this.release();
+                    }, 2500);
+                } else {
+                    this.release();
+                }
+            }
         }
     }
 
@@ -328,6 +370,7 @@ class Game extends egret.Sprite {
                     this.target = e.bodyA === crBody ? e.bodyB : e.bodyA;
                     this.hooker.stop();
                     this.createConstraint(this.target);
+                    this.dispatchEvent(new egret.Event('catch'));
                     console.log('hit -> ' + this.target.displayName);
                 }
             }
@@ -340,9 +383,18 @@ class Game extends egret.Sprite {
             }
         });
 
+        this.addEventListener('catch', function (e: egret.Event) {
+            this.getGameResult(this.target);
+        }, this);
+
         this.hooker.addEventListener('godown', function () {
             //钩子下降时创建爪子刚体
             this.createConstraintBody();
+        }, this);
+
+        //钩子下降到最底部
+        this.hooker.addEventListener('reachdown', function () {
+            this.getGameResult(null);
         }, this);
 
         this.hooker.addEventListener('goup', function () {
@@ -354,9 +406,8 @@ class Game extends egret.Sprite {
 
         this.hooker.addEventListener('reachup', function () {
             this.removePaws();
-            this.removeConstraint();
             this.showResult(this.target);
-            console.log('reachup');
+            this.dispatchEvent(new egret.Event('reachup'));
         }, this);
     }
 }

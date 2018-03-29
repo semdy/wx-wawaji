@@ -10,7 +10,7 @@ class Hooker extends egret.Sprite {
 
         this.x = x;
         this.y = y;
-        this._canMove = true;
+        this._canMove = false;
 
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
@@ -41,41 +41,48 @@ class Hooker extends egret.Sprite {
         this.initEvents();
     }
 
-    goDown(): void {
+    public goDown(): void {
         this.dispatchEvent(new egret.Event('godown'));
-        egret.Tween.get(this.paws).to({y: 380}, 3000).call(() => {
-            setTimeout(() => this.goUp(), 800);
+        egret.Tween.get(this.paws).to({ y: 380 }, 3000).call(() => {
+            this.dispatchEvent(new egret.Event('reachdown'));
+            //setTimeout(() => this.goUp(), 800);
         });
         this.openLegs();
     }
 
-    goUp(): void {
+    public goUp(): void {
         this.dispatchEvent(new egret.Event('close'));
         this.closeLegs(() => {
             this.dispatchEvent(new egret.Event('goup'));
-            egret.Tween.get(this.paws).to({y: 0}, 3000).call(() => {
+            egret.Tween.get(this.paws).to({ y: 0 }, 3000).wait(300).call(() => {
                 this.dispatchEvent(new egret.Event('reachup'));
             });
         });
-
     }
 
-    stop(): void {
+    public stop(): void {
         egret.Tween.removeTweens(this.paws);
-        setTimeout(() => this.goUp(), 800);
     }
 
-    openLegs(): void {
-        egret.Tween.get(this.leftLeg).to({vx: -30, rotation: 30}, 1200);
-        egret.Tween.get(this.rightLeg).to({vx: 30, vy: -25, rotation: -27}, 1200);
+    public openLegs(): void {
+        egret.Tween.get(this.leftLeg).to({ vx: -30, rotation: 30 }, 1200);
+        egret.Tween.get(this.rightLeg).to({ vx: 30, vy: -25, rotation: -27 }, 1200);
     }
 
-    closeLegs(callback): void {
-        egret.Tween.get(this.leftLeg).to({vx: 0, rotation: 0}, 1200);
-        egret.Tween.get(this.rightLeg).to({vx: 0, vy: 0, rotation: 0}, 1200).call(callback, this);
+    public closeLegs(callback): void {
+        egret.Tween.get(this.leftLeg).to({ vx: 0, rotation: 0 }, 1200);
+        egret.Tween.get(this.rightLeg).to({ vx: 0, vy: 0, rotation: 0 }, 1200).call(callback, this);
     }
 
-    initEvents(): void {
+    public disable(): void {
+        this._canMove = false;
+    }
+
+    public enable(): void {
+        this._canMove = true;
+    }
+
+    private initEvents(): void {
         let isLeft = true;
         this.addEventListener(egret.Event.ENTER_FRAME, function () {
             if (this._canMove) {
@@ -87,9 +94,9 @@ class Hooker extends egret.Sprite {
                     this.x -= 2;
                 }
 
-                if (this.x > 490) {
+                if (this.x > 482) {
                     isLeft = false;
-                    this.x = 490
+                    this.x = 482
                 }
 
                 if (this.x <= 0) {
@@ -100,11 +107,11 @@ class Hooker extends egret.Sprite {
         }, this);
 
         this.addEventListener("startGame", e => {
-            this._canMove = false;
+            this.disable();
         }, this);
 
         this.addEventListener("reStartGame", e => {
-            this._canMove = true;
+            this.enable();
         }, this);
 
         /* this.stage.touchEnabled = true;

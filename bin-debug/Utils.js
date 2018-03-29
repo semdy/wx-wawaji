@@ -46,6 +46,39 @@ var Utils = (function () {
         return val;
     };
     ;
+    Utils.getQueryString = function (name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r !== null)
+            return unescape(r[2]);
+        return null;
+    };
+    Utils.toast = function (msg) {
+        if (wx.showToast) {
+            wx.showToast({ title: msg });
+        }
+        else {
+            console.error(msg);
+        }
+    };
+    Utils.isWeiXin = function () {
+        var ua = window.navigator.userAgent;
+        if (/MicroMessenger/.test(ua)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    Utils.isMiniGame = function () {
+        var ua = window.navigator.userAgent;
+        if (/MicroMessenger\/[\d.\d]+ MiniGame/.test(ua)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
     Utils.factor = 50;
     return Utils;
 }());

@@ -9,14 +9,26 @@
 		"physics/bin/physics/physics.js"
 	],
 	"game": [
+		"bin-debug/Utils.js",
+		"bin-debug/Main.js",
+		"bin-debug/AwardItem.js",
 		"bin-debug/Button.js",
+		"bin-debug/config.js",
+		"bin-debug/FailDlg.js",
 		"bin-debug/Game.js",
 		"bin-debug/Hooker.js",
+		"bin-debug/Http.js",
 		"bin-debug/LoadingUI.js",
-		"bin-debug/Main.js",
+		"bin-debug/auth.js",
 		"bin-debug/Noticer.js",
 		"bin-debug/Platform.js",
+		"bin-debug/PointDlg.js",
+		"bin-debug/PrizeDlg.js",
+		"bin-debug/PrizeItem.js",
+		"bin-debug/RuleDlg.js",
+		"bin-debug/service.js",
+		"bin-debug/storage.js",
 		"bin-debug/Timer.js",
-		"bin-debug/Utils.js"
+		"bin-debug/AwardDlg.js"
 	]
 }

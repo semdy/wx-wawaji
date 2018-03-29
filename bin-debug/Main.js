@@ -79,6 +79,7 @@ var Main = (function (_super) {
         return _this;
     }
     Main.prototype.onAddToStage = function (event) {
+        var _this = this;
         egret.lifecycle.addLifecycleListener(function (context) {
             // custom lifecycle plugin
             context.onUpdate = function () {
@@ -90,30 +91,58 @@ var Main = (function (_super) {
         egret.lifecycle.onResume = function () {
             egret.ticker.resume();
         };
-        this.runGame().catch(function (e) {
-            console.log(e);
+        this._openid = Utils.getQueryString('openid');
+        this.wxShare();
+        auth.launch();
+        auth.ready(function () {
+            _this.AuthReady();
         });
+    };
+    Main.prototype.AuthReady = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        service.asset.drop();
+                        return [4 /*yield*/, service.asset.remain()];
+                    case 1:
+                        res = _a.sent();
+                        this.remainAmount = this._getGameAmount(res.remain);
+                        this.runGame().catch(function (e) {
+                            console.log(e);
+                        });
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    Main.prototype._getGameAmount = function (remain) {
+        var ret = remain.filter(function (item) { return item.config === 'GameTicket#24001'; });
+        if (ret.length)
+            return ret[0].amount;
+        return 0;
     };
     Main.prototype.runGame = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var userInfo;
+            var gameLogs;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.loadResource()];
                     case 1:
                         _a.sent();
                         this.createGameScene();
-                        return [4 /*yield*/, platform.login()];
+                        return [4 /*yield*/, service.game.log()];
                     case 2:
-                        _a.sent();
-                        return [4 /*yield*/, platform.getUserInfo()];
-                    case 3:
-                        userInfo = _a.sent();
-                        console.log(userInfo);
+                        gameLogs = _a.sent();
+                        this.noticer.startChange(this._genNoticeData(gameLogs.income));
                         return [2 /*return*/];
                 }
             });
         });
+    };
+    Main.prototype._genNoticeData = function (logs) {
+        return logs.map(function (log) { return log.params.nick + "\u83B7\u5F97" + log.params.title + " x " + log.amount; });
     };
     Main.prototype.loadResource = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -141,6 +170,77 @@ var Main = (function (_super) {
             });
         });
     };
+    Main.prototype.getOpenid = function () {
+        return this._openid || storage.local.get('_openid');
+    };
+    Main.prototype.wxShare = function () {
+        if (!Utils.isMiniGame()) {
+            weixinApiService.authorize();
+            weixinApiService.exec('onMenuShareTimeline', {
+                title: '原麦山丘四周年，邀你一起领福利！',
+                link: URLObj.shareUrl + '/share.html?uname=' + URLObj.Config.uname + '&openid=' + this.getOpenid(),
+                imgUrl: URLObj.Config.urls.shareIcon,
+                success: function (res) {
+                },
+                cancel: function () {
+                },
+                fail: function (res) {
+                    console.info('fail' + JSON.stringify(res));
+                }
+            });
+            weixinApiService.exec('onMenuShareAppMessage', {
+                title: '原麦山丘四周年，邀你一起领福利！',
+                desc: '这台时光机，只想与你分享！',
+                link: URLObj.shareUrl + '/share.html?uname=' + URLObj.Config.uname + '&openid=' + this.getOpenid(),
+                imgUrl: URLObj.Config.urls.shareIcon,
+                success: function () {
+                },
+                cancel: function () {
+                }
+            });
+        }
+    };
+    Main.prototype.showAward = function (data) {
+        this.setChildIndex(this.awardDlg, 100);
+        this.awardDlg.setData(data);
+        this.awardDlg.visible = true;
+    };
+    Main.prototype.hideAward = function () {
+        this.awardDlg.visible = false;
+    };
+    Main.prototype.showFail = function () {
+        this.setChildIndex(this.failDlg, 100);
+        this.failDlg.visible = true;
+    };
+    Main.prototype.hideFail = function () {
+        this.failDlg.visible = false;
+    };
+    Main.prototype.showPoint = function () {
+        this.setChildIndex(this.pointDlg, 100);
+        this.pointDlg.visible = true;
+    };
+    Main.prototype.hidePoint = function () {
+        this.pointDlg.visible = false;
+    };
+    Main.prototype.showRule = function () {
+        var ruleDlg = new RuleDlg();
+        this.addChild(ruleDlg);
+    };
+    Main.prototype.showPrizes = function () {
+        var _this = this;
+        if (this.prizeDlg) {
+            this.prizeDlg.visible = true;
+        }
+        else {
+            this.giftBtn.touchEnabled = false;
+            service.game.config().then(function (res) {
+                _this.giftBtn.touchEnabled = true;
+                _this.prizeDlg = new PrizeDlg();
+                _this.addChild(_this.prizeDlg);
+                _this.prizeDlg.setData(_this._genPrizeData(res.income));
+            });
+        }
+    };
     /**
      * 创建游戏场景
      * Create a game scene
@@ -151,18 +251,49 @@ var Main = (function (_super) {
         this.initEvents();
     };
     Main.prototype.addElements = function () {
-        this.addChild(Utils.createBitmapByName('bg_png', 0, 0, this.stage.stageWidth, this.stage.stageHeight));
+        this.addChild(Utils.createBitmapByName('bg_jpg', 0, 0, this.stage.stageWidth, this.stage.stageHeight));
         this.addChild(Utils.createBitmapByName('main_title_png', 225, 156));
-        this.addChild(Utils.createBitmapByName('button_signin_png', 23, 133));
-        this.addChild(Utils.createBitmapByName('button_gift_png', 648, 126));
+        this.ruleBtn = Utils.createBitmapByName('rule_btn_png', 0, 113);
+        this.addChild(this.ruleBtn);
+        this.ruleBtn.touchEnabled = true;
+        this.ruleBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, function (event) {
+            this.showRule();
+        }, this);
+        this.giftBtn = Utils.createBitmapByName('gift_btn_png', 648, 106);
+        this.addChild(this.giftBtn);
+        this.giftBtn.touchEnabled = true;
+        this.giftBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, function (event) {
+            this.showPrizes();
+        }, this);
         this.noticer = new Noticer(90, 276);
         this.addChild(this.noticer);
-        this.timer = new Timer(586, 1196);
+        this.timer = new Timer(582, 1216);
+        this.timer.setCount(this.remainAmount);
         this.addChild(this.timer);
-        this.game = new Game(50, 366);
+        this.game = new Game(50, 368);
         var mask = new egret.Rectangle(-50, 0, this.stage.stageWidth, 765);
         this.game.mask = mask;
         this.addChild(this.game);
+        this.addChild(Utils.createBitmapByName('top_roof_png', 0, 196));
+        this.awardDlg = new AwardDlg();
+        this.awardDlg.visible = false;
+        this.addChild(this.awardDlg);
+        this.failDlg = new FailDlg();
+        this.failDlg.visible = false;
+        this.addChild(this.failDlg);
+        this.pointDlg = new PointDlg();
+        this.pointDlg.visible = false;
+        this.addChild(this.pointDlg);
+    };
+    Main.prototype._genPrizeData = function (data) {
+        var ret = [];
+        Object.keys(data).forEach(function (name) {
+            ret.push({
+                key: name,
+                title: data[name][0].params.title
+            });
+        });
+        return ret;
     };
     Main.prototype.createButton = function () {
         this.startButton = new Button({
@@ -179,15 +310,43 @@ var Main = (function (_super) {
     };
     Main.prototype.initEvents = function () {
         this.startButton.addEventListener(egret.TouchEvent.TOUCH_TAP, function (e) {
-            this.game.dispatchEvent(new egret.Event("startGame"));
-        }, this);
-        this.startButton.addEventListener(egret.TouchEvent.TOUCH_BEGIN, function (e) {
-            e.stopPropagation();
-        }, this);
-        this.stage.addEventListener(egret.TouchEvent.TOUCH_END, function (e) {
-            if (e.stageY < 200) {
-                this.game.reStart();
+            if (this.remainAmount > 0) {
+                this.game.dispatchEvent(new egret.Event("startGame"));
             }
+            else {
+                this.showPoint();
+            }
+            this.startButton.touchEnabled = false;
+        }, this);
+        this.game.addEventListener("reachup", function (e) {
+            this.remainAmount = Math.max(0, --this.remainAmount);
+            this.timer.setCount(this.remainAmount);
+        }, this);
+        this.awardDlg.addEventListener('close', function (e) {
+            this.hideAward();
+            this.startButton.touchEnabled = true;
+            this.game.reStart();
+        }, this);
+        this.failDlg.addEventListener('close', function (e) {
+            this.hideFail();
+            this.startButton.touchEnabled = true;
+            this.game.reStart();
+        }, this);
+        this.pointDlg.addEventListener('close', function (e) {
+            var _this = this;
+            //用积分兑换游戏券
+            service.asset.exchange().then(function (res) {
+                _this.remainAmount = _this._getGameAmount(res.income);
+                if (_this.remainAmount > 0) {
+                    _this.hidePoint();
+                    _this.timer.setCount(_this.remainAmount);
+                    _this.startButton.touchEnabled = true;
+                    _this.game.reStart();
+                }
+                else {
+                    Utils.toast("您当前积分不足，请去商城购物或者通过其它方式获取更多积分");
+                }
+            });
         }, this);
         document.addEventListener("touchstart", function (e) {
             e.preventDefault();
