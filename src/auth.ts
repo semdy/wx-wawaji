@@ -208,7 +208,7 @@
       isUserFollowed(function (isFollowed) {
         if (isFollowed) {
           requireUserInfo(function () {
-            requireUserAuth(function(){
+            requireUserAuth(function() {
               gotoApp();
             });
           });

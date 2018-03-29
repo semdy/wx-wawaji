@@ -324,9 +324,9 @@ class Game extends egret.Sprite {
             console.log('未抓到任何面包');
         }
         if (this.award.length > 0) {
-            this.parent.showAward(this.award);
+            this.parent['showAward'](this.award);
         } else {
-            this.parent.showFail();
+            this.parent['showFail']();
         }
     }
 

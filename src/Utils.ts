@@ -45,7 +45,7 @@ class Utils {
     public static getQueryString(name: string): string {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
         var r = window.location.search.substr(1).match(reg);
-        if (r !== null) return unescape(r[2]); return null;
+        if (r !== null) return decodeURIComponent(r[2]); return null;
     }
 
     public static toast(msg: string): void {
