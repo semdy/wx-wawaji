@@ -15,9 +15,6 @@
       return null;
     }
     var redirect_uri = getQueryString("redirectUri");
-    if (location.hostname === 'wx.withwheat.com') {
-      redirect_uri = redirect_uri.replace("OrderUI-wheat", "OrderUI");
-    }
     location.replace(redirect_uri);
   </script>
 </body>
