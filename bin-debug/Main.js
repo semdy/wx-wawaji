@@ -290,6 +290,7 @@ var Main = (function (_super) {
         Object.keys(data).forEach(function (name) {
             ret.push({
                 key: name,
+                amount: data[name][0].amount,
                 title: data[name][0].params.title
             });
         });

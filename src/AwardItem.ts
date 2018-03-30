@@ -12,11 +12,11 @@ class AwardItem extends egret.Sprite {
         let awardItemBg: egret.Bitmap = Utils.createBitmapByName('award_item_bg_png');
         this.addChild(awardItemBg);
         let title: egret.TextField = new egret.TextField();
-        title.text = (this.data.params||{}).title;
+        title.text = `${(this.data.params||{}).title} x ${this.data.amount}`;
         title.textColor = 0x762a1d;
-        title.size = 32;
+        title.size = 28;
         title.bold = true;
-        title.x = 204;
+        title.x = 190;
         title.y = 52;
         this.addChild(title);
     }

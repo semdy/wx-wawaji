@@ -258,6 +258,7 @@ class Main extends egret.DisplayObjectContainer {
         Object.keys(data).forEach(name => {
             ret.push({
                 key: name,
+                amount: data[name][0].amount,
                 title: data[name][0].params.title
             });
         });

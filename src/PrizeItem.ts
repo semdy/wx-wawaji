@@ -16,7 +16,7 @@ class PrizeItem extends egret.Sprite {
         awardItemBg.y = 23;
         this.addChild(awardItemBg);
         let title: egret.TextField = new egret.TextField();
-        title.text = this.data.title;
+        title.text = `${this.data.title} x ${this.data.amount}`;
         title.textColor = 0x333333;
         title.size = 28;
         title.x = 165;
