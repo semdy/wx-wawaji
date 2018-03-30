@@ -41,18 +41,36 @@ class LoadingUI extends egret.Sprite implements RES.PromiseTaskReporter {
     }
 
     private createView(): void {
+        let bg: egret.Bitmap = Utils.createBitmapByName('loading_pbg_jpg');
+        this.addChild(bg);
+
+        let dec: egret.Bitmap = Utils.createBitmapByName('loading_dec_png', 310, 0);
+        this.addChild(dec);
+
+        let barSpr: egret.Sprite = new egret.Sprite();
+        barSpr.x = 134;
+        barSpr.y = 645;
+        let barBg: egret.Bitmap = Utils.createBitmapByName('loading_bg_png');
+        barSpr.addChild(barBg);
+        let bar: egret.Bitmap = Utils.createBitmapByName('loading_bar_png', 9, 7);
+        barSpr.addChild(bar);
+
+        let loadingText: egret.Bitmap = Utils.createBitmapByName('loading_png', 170, 14);
+        barSpr.addChild(loadingText);
+
         this.textField = new egret.TextField();
-        this.addChild(this.textField);
-        let stageW = this.stage.stageWidth;
-        let stageH = this.stage.stageHeight;
-        this.textField.width = 480;
-        this.textField.height = 100;
-        this.textField.x = (stageW - this.textField.width) / 2;
-        this.textField.y = (stageH - this.textField.height) / 2;
+        barSpr.addChild(this.textField);
+        this.textField.textColor = 0xffffff;
+        this.textField.strokeColor = 0x22712a;
+        this.textField.stroke = 2;
+        this.textField.size = 21;
+        this.textField.x = 290;
+        this.textField.y = 14;
         this.textField.textAlign = "center";
+        this.addChild(barSpr);
     }
 
     public onProgress(current: number, total: number): void {
-        this.textField.text = `Loading...${current}/${total}`;
+        this.textField.text = `${Math.floor(current/total*100)}%`;
     }
 }

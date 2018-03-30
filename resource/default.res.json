@@ -1,10 +1,19 @@
 {
 	"groups":[
 	{
-		"keys":"fail_bg_png,gift_btn_png,left_leg_png,machine_02_png,machine_top_png,main_title_png,point_bg_png,price_bg_png,right_leg_png,rule_bg_png,rule_btn_png,top_roof_png,award_bg_png,award_item_bg_png,bg_jpg,bread01_png,bread02_png,bread03_png,bread04_png,bread05_png,bread06_png,bread07_png,bread08_png,bread09_png,bread10_png,button_go_png,button_go_0_png,circle-close_png",
+		"keys":"circle-close_png,fail_bg_png,gift_btn_png,left_leg_png,machine_02_png,machine_top_png,main_title_png,point_bg_png,price_bg_png,right_leg_png,rule_bg_png,rule_btn_png,shareIcon_png,top_roof_png,award_bg_png,award_item_bg_png,bg_jpg,bread01_png,bread02_png,bread03_png,bread04_png,bread05_png,bread06_png,bread07_png,bread08_png,bread09_png,bread10_png,button_go_png,button_go_0_png",
 		"name":"preload"
+	},
+	{
+		"keys":"loading_png,loading_bar_png,loading_bg_png,loading_dec_png,loading_pbg_jpg",
+		"name":"loading"
 	}],
 	"resources":[
+	{
+		"name":"circle-close_png",
+		"type":"image",
+		"url":"assets/circle-close.png"
+	},
 	{
 		"name":"fail_bg_png",
 		"type":"image",
@@ -59,6 +68,11 @@
 		"name":"rule_btn_png",
 		"type":"image",
 		"url":"assets/rule_btn.png"
+	},
+	{
+		"name":"shareIcon_png",
+		"type":"image",
+		"url":"assets/shareIcon.png"
 	},
 	{
 		"name":"top_roof_png",
@@ -141,8 +155,28 @@
 		"url":"assets/button_go_0.png"
 	},
 	{
-		"name":"circle-close_png",
+		"name":"loading_png",
 		"type":"image",
-		"url":"assets/circle-close.png"
+		"url":"assets/loading.png"
+	},
+	{
+		"name":"loading_bar_png",
+		"type":"image",
+		"url":"assets/loading_bar.png"
+	},
+	{
+		"name":"loading_bg_png",
+		"type":"image",
+		"url":"assets/loading_bg.png"
+	},
+	{
+		"name":"loading_dec_png",
+		"type":"image",
+		"url":"assets/loading_dec.png"
+	},
+	{
+		"name":"loading_pbg_jpg",
+		"type":"image",
+		"url":"assets/loading_pbg.jpg"
 	}]
 }
