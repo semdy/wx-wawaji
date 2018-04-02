@@ -1,17 +1,17 @@
 var URLObj = (function () {
     var URLObj = {
-        urlHost: "http://{hostname}/zaofans_wheat",
-        siloHost: "http://it.zaofans.com/silo/debug",
-        shareUrl: "http://{hostname}/OrderUI-wheat/activity/activitys/wawaji",
-        weixinapiURL: "http://{hostname}/weixin_wheat/open-api",
-        weixinAuthUser: "https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2F{hostname}%2FOrderUI-wheat%2Factivity%2Factivitys%2Fwawaji%2Findex.html?uname={uname}&response_type=code&scope=snsapi_base&state=123456#wechat_redirect",
+        urlHost: "http://{hostname}/zaofans",
+        siloHost: "https://silo.withwheat.com",
+        shareUrl: "http://{hostname}/OrderUI/activity/activitys/wawaji",
+        weixinapiURL: "http://{hostname}/weixin/open-api",
+        weixinAuthUser: "https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2F{hostname}%2FOrderUI%2Factivity%2Factivitys%2Fwawaji%2Findex.html?uname={uname}&response_type=code&scope=snsapi_base&state=123456#wechat_redirect",
         Config: {
             urls: {
                 userinfo: '/usercenter/user/info',
                 buyrecord: '/user/buy/record/get',
                 shareReward: '/user/reward/share/151',
                 authToken: '/silo/user/auth/create',
-                shareIcon: 'http://www.zaofans.com/OrderUI-wheat/activity/activitys/wawaji/resource/assets/shareIcon.png'
+                shareIcon: 'http://wx.withwheat.com/OrderUI/activity/activitys/wawaji/resource/assets/shareIcon.png'
             },
             uname: 'zaofans',
             useCache: true

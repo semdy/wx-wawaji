@@ -1,6 +1,6 @@
 var storage = (function () {
   var isLocalStorageSupported: boolean = function () {
-    var testKey = 'test', storage = window.localStorage;
+    var testKey = 'test', storage = localStorage;
     try {
       storage.setItem(testKey, '1');
       storage.removeItem(testKey);
@@ -10,7 +10,7 @@ var storage = (function () {
     }
   }();
 
-  var STORAGE_KEY: string = Utils.getQueryString("uname") || window.localStorage.getItem("wx_uname") || 'zaofans';
+  var STORAGE_KEY: string = Utils.getQueryString("uname") || localStorage.getItem("wx_uname") || 'zaofans';
 
   function getKey(key): string {
     if (key === undefined || key === null || key === "") return key;
@@ -131,7 +131,7 @@ var storage = (function () {
 
       if (isLocalStorageSupported) {
         key = getKey(key);
-        window.localStorage.setItem(key, encodeURIComponent(value));
+        localStorage.setItem(key, encodeURIComponent(value));
       } else {
         Cookie.set(key, value, 3650);
       }
@@ -141,7 +141,7 @@ var storage = (function () {
 
       if (isLocalStorageSupported) {
         key = getKey(key);
-        val = decodeURIComponent(window.localStorage.getItem(key));
+        val = decodeURIComponent(localStorage.getItem(key));
       } else {
         val = JSON.stringify(Cookie.get(key));
       }
@@ -156,7 +156,7 @@ var storage = (function () {
     remove: function (key: string): void {
       if (isLocalStorageSupported) {
         key = getKey(key);
-        window.localStorage.removeItem(key);
+        localStorage.removeItem(key);
       } else {
         Cookie.remove(key);
       }
@@ -164,11 +164,11 @@ var storage = (function () {
     clear: function (clearAll?: boolean): void {
       if (isLocalStorageSupported) {
         if (clearAll) {
-          window.localStorage.clear();
+          localStorage.clear();
         } else {
-          Object.keys(window.localStorage).forEach(function (key) {
+          Object.keys(localStorage).forEach(function (key) {
             if (key.split(":")[0] === STORAGE_KEY) {
-              window.localStorage.removeItem(key);
+              localStorage.removeItem(key);
             }
           });
         }
@@ -178,9 +178,9 @@ var storage = (function () {
     },
     length: function (isAll?: boolean): number {
       if (isAll) {
-        return window.localStorage.length;
+        return localStorage.length;
       } else {
-        return Object.keys(window.localStorage).filter(function (key) {
+        return Object.keys(localStorage).filter(function (key) {
           return key.split(":")[0] === STORAGE_KEY;
         }).length;
       }
@@ -196,7 +196,7 @@ var storage = (function () {
 
       if (isLocalStorageSupported) {
         key = getKey(key);
-        window.sessionStorage.setItem(key, encodeURIComponent(value));
+        sessionStorage.setItem(key, encodeURIComponent(value));
       } else {
         Cookie.set(key, value);
       }
@@ -206,7 +206,7 @@ var storage = (function () {
 
       if (isLocalStorageSupported) {
         key = getKey(key);
-        val = decodeURIComponent(window.sessionStorage.getItem(key));
+        val = decodeURIComponent(sessionStorage.getItem(key));
       } else {
         val = JSON.stringify(Cookie.get(key));
       }
@@ -220,7 +220,7 @@ var storage = (function () {
     remove: function (key: string): void {
       if (isLocalStorageSupported) {
         key = getKey(key);
-        window.sessionStorage.removeItem(key);
+        sessionStorage.removeItem(key);
       } else {
         Cookie.remove(key);
       }
@@ -228,11 +228,11 @@ var storage = (function () {
     clear: function (clearAll?: boolean): void {
       if (isLocalStorageSupported) {
         if (clearAll) {
-          window.sessionStorage.clear();
+          sessionStorage.clear();
         } else {
-          Object.keys(window.sessionStorage).forEach(function (key) {
+          Object.keys(sessionStorage).forEach(function (key) {
             if (key.split(":")[0] === STORAGE_KEY)
-              window.sessionStorage.removeItem(key);
+              sessionStorage.removeItem(key);
           });
         }
       } else {
@@ -241,9 +241,9 @@ var storage = (function () {
     },
     length: function (isAll?: boolean): number {
       if (isAll) {
-        return window.sessionStorage.length;
+        return sessionStorage.length;
       } else {
-        return Object.keys(window.sessionStorage).filter(function (key) {
+        return Object.keys(sessionStorage).filter(function (key) {
           return key.split(":")[0] === STORAGE_KEY;
         }).length;
       }
