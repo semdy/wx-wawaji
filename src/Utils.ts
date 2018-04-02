@@ -52,7 +52,7 @@ class Utils {
         if (wx.showToast) {
             wx.showToast({title: msg});
         } else {
-            console.error(msg);
+            alert(msg);
         }
     }
 

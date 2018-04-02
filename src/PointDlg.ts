@@ -41,7 +41,8 @@ class PointDlg extends egret.Sprite {
         awardSpr.addChild(this.closeBtn);
         this.closeBtn.touchEnabled = true;
         this.closeBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, function (event: egret.TouchEvent) {
-            this.dispatchEvent(new egret.Event('close'));
+            //this.dispatchEvent(new egret.Event('close'));
+            this.visible = false;
         }, this)
         awardSpr.addChild(awardBg);
 

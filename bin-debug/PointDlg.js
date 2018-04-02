@@ -44,7 +44,8 @@ var PointDlg = (function (_super) {
         awardSpr.addChild(this.closeBtn);
         this.closeBtn.touchEnabled = true;
         this.closeBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, function (event) {
-            this.dispatchEvent(new egret.Event('close'));
+            //this.dispatchEvent(new egret.Event('close'));
+            this.visible = false;
         }, this);
         awardSpr.addChild(awardBg);
         this.addChild(awardSpr);

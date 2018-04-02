@@ -58,7 +58,7 @@ var Utils = (function () {
             wx.showToast({ title: msg });
         }
         else {
-            console.error(msg);
+            alert(msg);
         }
     };
     Utils.isWeiXin = function () {
