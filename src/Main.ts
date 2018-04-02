@@ -41,6 +41,7 @@ class Main extends egret.DisplayObjectContainer {
     private prizeDlg: PrizeDlg;
     private ruleBtn: egret.Bitmap;
     private giftBtn: egret.Bitmap;
+    private loadingView: any;
     private _sourceReady: boolean;
     private _authReady: boolean;
 
@@ -102,6 +103,7 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     private async runGame() {
+        this.stage.removeChild(this.loadingView);
         this.createGameScene();
         /* await platform.login();
         const userInfo = await platform.getUserInfo();
@@ -118,10 +120,9 @@ class Main extends egret.DisplayObjectContainer {
         try {
             await RES.loadConfig("resource/default.res.json", "resource/");
             await RES.loadGroup("loading", 1);
-            const loadingView = new LoadingUI();
-            this.stage.addChild(loadingView);
-            await RES.loadGroup("preload", 0, loadingView);
-            this.stage.removeChild(loadingView);
+            this.loadingView = new LoadingUI();
+            this.stage.addChild(this.loadingView);
+            await RES.loadGroup("preload", 0, this.loadingView);
         }
         catch (e) {
             console.error(e);
