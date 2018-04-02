@@ -152,7 +152,7 @@ class Main extends egret.DisplayObjectContainer {
 
             weixinApiService.exec('onMenuShareAppMessage', {
                 title: '原麦山丘抓面包抽奖啦！',
-                desc: '快来试试手气，赢取积分优惠券！',
+                desc: '快来试试手气，赢取麦点优惠券！',
                 link: `${URLObj.shareUrl}/share.html?redirectUri=${encodeURIComponent(URLObj.weixinAuthUser)}`,
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function () {
