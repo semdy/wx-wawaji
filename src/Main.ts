@@ -316,7 +316,9 @@ class Main extends egret.DisplayObjectContainer {
 
         this.pointDlg.addEventListener('close', function (e) {
             //用积分兑换游戏券
+            this.pointDlg.button.touchEnabled = false;
             service.asset.exchange().then(res => {
+                this.pointDlg.button.touchEnabled = true;
                 this.remainAmount = this._getGameAmount(res.income);
                 if (this.remainAmount > 0) {
                     this.hidePoint();

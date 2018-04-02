@@ -341,7 +341,9 @@ var Main = (function (_super) {
         this.pointDlg.addEventListener('close', function (e) {
             var _this = this;
             //用积分兑换游戏券
+            this.pointDlg.button.touchEnabled = false;
             service.asset.exchange().then(function (res) {
+                _this.pointDlg.button.touchEnabled = true;
                 _this.remainAmount = _this._getGameAmount(res.income);
                 if (_this.remainAmount > 0) {
                     _this.hidePoint();
