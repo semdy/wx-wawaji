@@ -17,7 +17,7 @@ class AwardItem extends egret.Sprite {
         title.size = 28;
         title.bold = true;
         title.x = 190;
-        title.y = 52;
+        title.y = 75;
         this.addChild(title);
     }
 

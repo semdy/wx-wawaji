@@ -110,6 +110,9 @@ var auth = (function () {
                 if (isFollowed) {
                     storage.local.set("_isFollowed", isFollowed);
                 }
+                else {
+                    storage.local.remove("_isFollowed");
+                }
                 callback(isFollowed);
             }).catch(function () {
                 callback(false);

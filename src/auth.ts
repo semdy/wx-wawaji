@@ -118,6 +118,8 @@ var auth = (function () {
         var isFollowed = (ret.data || {}).subscribe === 1 ? true : false;
         if (isFollowed) {
           storage.local.set("_isFollowed", isFollowed);
+        } else {
+          storage.local.remove("_isFollowed");
         }
         callback(isFollowed);
       }).catch(function () {

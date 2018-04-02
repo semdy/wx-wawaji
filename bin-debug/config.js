@@ -25,7 +25,7 @@ var URLObj = (function () {
         isLocal = true;
     }
     var APPID_MAP = {
-        zaofans: "wxbbc70552f97b9141",
+        zaofans: "wxa3c1a88324d35d1f",
         wuhan: "wx904143829f0b0d1b",
         nanjing: "wx9746bb172d736a0c",
         dalian: "wx610b5c9cf75bdf07",
@@ -36,7 +36,7 @@ var URLObj = (function () {
         tianjin: "wxbb9dc835c34e9918",
         gertz: "wxc97360c6205ff452",
         joyseed: "wxc61ea7696e402f22",
-        default: "wxbbc70552f97b9141"
+        default: "wxa3c1a88324d35d1f"
     };
     for (var i in URLObj) {
         if (typeof URLObj[i] === 'string') {
