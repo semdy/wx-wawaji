@@ -15,7 +15,7 @@ var service;
         function common() {
         }
         common.doRequest = function (url, data, sucFun, errFun) {
-            Http.post("" + common.URL_HOST + url + ".json", __assign({ auth: user.getAuthToken() }, data), { processData: false }).then(function (res) {
+            Http.post("" + URLObj.siloHost + url + ".json", __assign({ auth: user.getAuthToken() }, data), { processData: false }).then(function (res) {
                 if (res.protocError === 0) {
                     sucFun(res);
                 }
@@ -42,7 +42,6 @@ var service;
                 common.doRequest(url, data, resolve, reject);
             });
         };
-        common.URL_HOST = 'https://dev.withwheat.wang/silo/h5/';
         return common;
     }());
     service.common = common;

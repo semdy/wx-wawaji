@@ -1,8 +1,7 @@
 module service {
     export class common {
-        private static URL_HOST = 'https://dev.withwheat.wang/silo/h5/';
         public static doRequest(url: string, data: object, sucFun: Function, errFun: Function): void {
-            Http.post(`${common.URL_HOST}${url}.json`, { auth: user.getAuthToken(), ...data }, { processData: false }).then((res) => {
+            Http.post(`${URLObj.siloHost}${url}.json`, { auth: user.getAuthToken(), ...data }, { processData: false }).then((res) => {
                 if (res.protocError === 0) {
                     sucFun(res);
                 } else {
