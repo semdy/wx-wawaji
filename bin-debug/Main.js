@@ -187,7 +187,7 @@ var Main = (function (_super) {
         if (!Utils.isMiniGame()) {
             weixinApiService.authorize();
             weixinApiService.exec('onMenuShareTimeline', {
-                title: '原麦山丘抓面包抽奖',
+                title: '原麦山丘抓面包抽奖啦！',
                 link: URLObj.shareUrl + "/share.html?redirectUri=" + encodeURIComponent(URLObj.weixinAuthUser),
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function (res) {
@@ -199,8 +199,8 @@ var Main = (function (_super) {
                 }
             });
             weixinApiService.exec('onMenuShareAppMessage', {
-                title: '原麦山丘抓面包抽奖',
-                desc: '原麦山丘抓面包抽奖',
+                title: '原麦山丘抓面包抽奖啦！',
+                desc: '快来试试手气，赢取积分优惠券！',
                 link: URLObj.shareUrl + "/share.html?redirectUri=" + encodeURIComponent(URLObj.weixinAuthUser),
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function () {
