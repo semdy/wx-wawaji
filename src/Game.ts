@@ -180,9 +180,7 @@ class Game extends egret.Sprite {
     private createBread(arg: breadArg, startX: number = 0, mass: number = 2): p2.Body {
 
         //添加长方形刚体的显示对象
-        let display: egret.Bitmap = Utils.createBitmapByName(arg.resId);
-        display.width = display.width * 0.6;
-        display.height = display.height * 0.6;
+        let display: Bread = new Bread(arg.resId);
 
         //面包开始掉落的初始位置
         let startY = -display.height;
@@ -315,10 +313,14 @@ class Game extends egret.Sprite {
     private release(): void {
         this.removeConstraint();
         this.removePaws();
+        if (this.target) {
+            this.target.displays[0].cry();
+        }
     }
 
     private showResult(target: any): void {
         if (target) {
+            target.displays[0].stopSmile();
             console.log(target.displayName, target.bundleId);
         } else {
             console.log('未抓到任何面包');
@@ -336,6 +338,8 @@ class Game extends egret.Sprite {
         this.hooker.goUp();
         //如果有抓中
         if (target) {
+            //给抓中的面包一个笑脸
+            target.displays[0].smile();
             //如果没有中奖，则给个概率是在底部释放还是抓子升起一半时释放
             if (this.award.length === 0) {
                 if (Math.random() > .2) {
@@ -358,8 +362,10 @@ class Game extends egret.Sprite {
         }, this);
 
         this.addEventListener("startGame", function (e) {
-            this.hooker.goDown();
-            this.hooker.dispatchEvent(new egret.Event('startGame'));
+            if (this.hooker.isEnabled()) {
+                this.hooker.goDown();
+                this.hooker.dispatchEvent(new egret.Event('startGame'));
+            }
         }, this);
 
         this.world.on('impact', e => {

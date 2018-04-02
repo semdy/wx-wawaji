@@ -4,6 +4,7 @@ class AwardDlg extends egret.Sprite {
     private scrollView: egret.ScrollView;
     private button: egret.Shape;
     private hint: egret.TextField;
+    private awardSpr: egret.Sprite;
 
     public constructor(awardData: Array<any> = []) {
         super();
@@ -20,8 +21,6 @@ class AwardDlg extends egret.Sprite {
         this.addChild(alphaMask);
 
         let awardSpr: egret.Sprite = new egret.Sprite();
-        awardSpr.x = 40;
-        awardSpr.y = 150;
 
         let awardBg: egret.Bitmap = Utils.createBitmapByName('award_bg_png');
         awardSpr.addChild(awardBg);
@@ -53,12 +52,31 @@ class AwardDlg extends egret.Sprite {
         this.scrollView.height = 260;
         awardSpr.addChild(this.scrollView);
 
+        awardSpr.x = 40 + awardSpr.width/2;
+        awardSpr.y = 150 + awardSpr.height/2;
+        awardSpr.anchorOffsetX = awardSpr.width/2;
+        awardSpr.anchorOffsetY = awardSpr.height/2;
+        awardSpr.scaleX = 0.5;
+        awardSpr.scaleY = 0.5;
         this.addChild(awardSpr);
+
+        this.awardSpr = awardSpr;
     }
 
     public setData(awardData: Array<any>): void {
         this.dataList = awardData;
         this.setScrollViewContent();
+    }
+
+    public show(): void {
+        this.visible = true;
+        egret.Tween.get(this.awardSpr).to({scaleX: 1, scaleY: 1}, 500, egret.Ease.backOut);
+    }
+
+    public hide(): void {
+        this.awardSpr.scaleX = 0.5;
+        this.awardSpr.scaleY = 0.5;
+        this.visible = false;
     }
 
     private setScrollViewContent() {

@@ -41,9 +41,13 @@ class Main extends egret.DisplayObjectContainer {
     private prizeDlg: PrizeDlg;
     private ruleBtn: egret.Bitmap;
     private giftBtn: egret.Bitmap;
+    private _sourceReady: boolean;
+    private _authReady: boolean;
 
     public constructor() {
         super();
+        this._sourceReady = false;
+        this._authReady = false;
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
 
@@ -68,6 +72,13 @@ class Main extends egret.DisplayObjectContainer {
         this._openid = Utils.getQueryString('openid');
 
         this.wxShare();
+        this.loadResource().then(_ => {
+            this._sourceReady = true;
+            if (this._authReady) {
+                this.runGame();
+            }
+        });
+
         auth.launch();
         auth.ready(() => {
             this.AuthReady();
@@ -78,9 +89,10 @@ class Main extends egret.DisplayObjectContainer {
         service.asset.drop();
         let res = await service.asset.remain();
         this.remainAmount = this._getGameAmount(res.remain);
-        this.runGame().catch(e => {
-            console.log(e);
-        });
+        this._authReady = true;
+        if (this._sourceReady) {
+            this.runGame();
+        }
     }
 
     private _getGameAmount(remain: Array<{ config: string, amount: number }>): number {
@@ -90,7 +102,6 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     private async runGame() {
-        await this.loadResource();
         this.createGameScene();
         /* await platform.login();
         const userInfo = await platform.getUserInfo();
@@ -125,7 +136,7 @@ class Main extends egret.DisplayObjectContainer {
         if (!Utils.isMiniGame()) {
             weixinApiService.authorize();
             weixinApiService.exec('onMenuShareTimeline', {
-                title: '原麦山丘四周年，邀你一起领福利！',
+                title: '原麦山丘抓面包抽奖',
                 link: `${URLObj.shareUrl}/share.html?redirectUri=${encodeURIComponent(URLObj.weixinAuthUser)}`,
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function (res) {
@@ -139,8 +150,8 @@ class Main extends egret.DisplayObjectContainer {
             });
 
             weixinApiService.exec('onMenuShareAppMessage', {
-                title: '原麦山丘四周年，邀你一起领福利！',
-                desc: '这台时光机，只想与你分享！',
+                title: '原麦山丘抓面包抽奖',
+                desc: '原麦山丘抓面包抽奖',
                 link: `${URLObj.shareUrl}/share.html?redirectUri=${encodeURIComponent(URLObj.weixinAuthUser)}`,
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function () {
@@ -154,11 +165,7 @@ class Main extends egret.DisplayObjectContainer {
     public showAward(data: Array<object>): void {
         this.setChildIndex(this.awardDlg, 100);
         this.awardDlg.setData(data);
-        this.awardDlg.visible = true;
-    }
-
-    public hideAward(): void {
-        this.awardDlg.visible = false;
+        this.awardDlg.show();
     }
 
     public showFail(): void {
@@ -227,7 +234,7 @@ class Main extends egret.DisplayObjectContainer {
         }, this);
 
 
-        this.noticer = new Noticer(90, 276);
+        this.noticer = new Noticer(90, 282);
         this.addChild(this.noticer);
 
         this.timer = new Timer(582, 1216);
@@ -288,7 +295,6 @@ class Main extends egret.DisplayObjectContainer {
             } else {
                 this.showPoint();
             }
-            this.startButton.touchEnabled = false;
         }, this);
 
         this.game.addEventListener("reachup", function (e: egret.Event) {
@@ -297,8 +303,7 @@ class Main extends egret.DisplayObjectContainer {
         }, this)
 
         this.awardDlg.addEventListener('close', function (e) {
-            this.hideAward();
-            this.startButton.touchEnabled = true;
+            this.awardDlg.hide();
             this.game.reStart();
         }, this);
 

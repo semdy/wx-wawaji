@@ -35,6 +35,8 @@ class LoadingUI extends egret.Sprite implements RES.PromiseTaskReporter {
     }
 
     private textField: egret.TextField;
+    private barMask: egret.Rectangle;
+    private bar: egret.Bitmap;
 
     private onAddToStage(event: egret.Event) {
         this.createView();
@@ -47,19 +49,23 @@ class LoadingUI extends egret.Sprite implements RES.PromiseTaskReporter {
         let dec: egret.Bitmap = Utils.createBitmapByName('loading_dec_png', 310, 0);
         this.addChild(dec);
 
-        let barSpr: egret.Sprite = new egret.Sprite();
-        barSpr.x = 134;
-        barSpr.y = 645;
+        let loadingSpr: egret.Sprite = new egret.Sprite();
+        loadingSpr.x = 134;
+        loadingSpr.y = 645;
         let barBg: egret.Bitmap = Utils.createBitmapByName('loading_bg_png');
-        barSpr.addChild(barBg);
-        let bar: egret.Bitmap = Utils.createBitmapByName('loading_bar_png', 9, 7);
-        barSpr.addChild(bar);
+        loadingSpr.addChild(barBg);
+        
+
+        this.bar = Utils.createBitmapByName('loading_bar_png', 9, 7);
+        this.barMask = new egret.Rectangle(-this.bar.width, 0, this.bar.width, this.bar.height);
+        this.bar.mask = this.barMask;
+        loadingSpr.addChild(this.bar);
 
         let loadingText: egret.Bitmap = Utils.createBitmapByName('loading_png', 170, 14);
-        barSpr.addChild(loadingText);
+        loadingSpr.addChild(loadingText);
 
         this.textField = new egret.TextField();
-        barSpr.addChild(this.textField);
+        loadingSpr.addChild(this.textField);
         this.textField.textColor = 0xffffff;
         this.textField.strokeColor = 0x22712a;
         this.textField.stroke = 2;
@@ -67,10 +73,12 @@ class LoadingUI extends egret.Sprite implements RES.PromiseTaskReporter {
         this.textField.x = 290;
         this.textField.y = 14;
         this.textField.textAlign = "center";
-        this.addChild(barSpr);
+        this.addChild(loadingSpr);
     }
 
     public onProgress(current: number, total: number): void {
         this.textField.text = `${Math.floor(current/total*100)}%`;
+        this.barMask.x = -this.barMask.width*(1 - current/total);
+        this.bar.mask = this.barMask;
     }
 }

@@ -82,6 +82,10 @@ class Hooker extends egret.Sprite {
         this._canMove = true;
     }
 
+    public isEnabled(): boolean {
+        return this._canMove;
+    }
+
     private initEvents(): void {
         let isLeft = true;
         this.addEventListener(egret.Event.ENTER_FRAME, function () {

@@ -75,6 +75,8 @@ var Main = (function (_super) {
     __extends(Main, _super);
     function Main() {
         var _this = _super.call(this) || this;
+        _this._sourceReady = false;
+        _this._authReady = false;
         _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
         return _this;
     }
@@ -93,6 +95,12 @@ var Main = (function (_super) {
         };
         this._openid = Utils.getQueryString('openid');
         this.wxShare();
+        this.loadResource().then(function (_) {
+            _this._sourceReady = true;
+            if (_this._authReady) {
+                _this.runGame();
+            }
+        });
         auth.launch();
         auth.ready(function () {
             _this.AuthReady();
@@ -109,9 +117,10 @@ var Main = (function (_super) {
                     case 1:
                         res = _a.sent();
                         this.remainAmount = this._getGameAmount(res.remain);
-                        this.runGame().catch(function (e) {
-                            console.log(e);
-                        });
+                        this._authReady = true;
+                        if (this._sourceReady) {
+                            this.runGame();
+                        }
                         return [2 /*return*/];
                 }
             });
@@ -128,12 +137,10 @@ var Main = (function (_super) {
             var gameLogs;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.loadResource()];
-                    case 1:
-                        _a.sent();
+                    case 0:
                         this.createGameScene();
                         return [4 /*yield*/, service.game.log()];
-                    case 2:
+                    case 1:
                         gameLogs = _a.sent();
                         this.noticer.startChange(this._genNoticeData(gameLogs.income));
                         return [2 /*return*/];
@@ -180,7 +187,7 @@ var Main = (function (_super) {
         if (!Utils.isMiniGame()) {
             weixinApiService.authorize();
             weixinApiService.exec('onMenuShareTimeline', {
-                title: '原麦山丘四周年，邀你一起领福利！',
+                title: '原麦山丘抓面包抽奖',
                 link: URLObj.shareUrl + "/share.html?redirectUri=" + encodeURIComponent(URLObj.weixinAuthUser),
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function (res) {
@@ -192,8 +199,8 @@ var Main = (function (_super) {
                 }
             });
             weixinApiService.exec('onMenuShareAppMessage', {
-                title: '原麦山丘四周年，邀你一起领福利！',
-                desc: '这台时光机，只想与你分享！',
+                title: '原麦山丘抓面包抽奖',
+                desc: '原麦山丘抓面包抽奖',
                 link: URLObj.shareUrl + "/share.html?redirectUri=" + encodeURIComponent(URLObj.weixinAuthUser),
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function () {
@@ -206,10 +213,7 @@ var Main = (function (_super) {
     Main.prototype.showAward = function (data) {
         this.setChildIndex(this.awardDlg, 100);
         this.awardDlg.setData(data);
-        this.awardDlg.visible = true;
-    };
-    Main.prototype.hideAward = function () {
-        this.awardDlg.visible = false;
+        this.awardDlg.show();
     };
     Main.prototype.showFail = function () {
         this.setChildIndex(this.failDlg, 100);
@@ -268,7 +272,7 @@ var Main = (function (_super) {
         this.giftBtn.addEventListener(egret.TouchEvent.TOUCH_TAP, function (event) {
             this.showPrizes();
         }, this);
-        this.noticer = new Noticer(90, 276);
+        this.noticer = new Noticer(90, 282);
         this.addChild(this.noticer);
         this.timer = new Timer(582, 1216);
         this.timer.setCount(this.remainAmount);
@@ -320,15 +324,13 @@ var Main = (function (_super) {
             else {
                 this.showPoint();
             }
-            this.startButton.touchEnabled = false;
         }, this);
         this.game.addEventListener("reachup", function (e) {
             this.remainAmount = Math.max(0, --this.remainAmount);
             this.timer.setCount(this.remainAmount);
         }, this);
         this.awardDlg.addEventListener('close', function (e) {
-            this.hideAward();
-            this.startButton.touchEnabled = true;
+            this.awardDlg.hide();
             this.game.reStart();
         }, this);
         this.failDlg.addEventListener('close', function (e) {

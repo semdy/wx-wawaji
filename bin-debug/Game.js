@@ -178,9 +178,7 @@ var Game = (function (_super) {
         if (startX === void 0) { startX = 0; }
         if (mass === void 0) { mass = 2; }
         //添加长方形刚体的显示对象
-        var display = Utils.createBitmapByName(arg.resId);
-        display.width = display.width * 0.6;
-        display.height = display.height * 0.6;
+        var display = new Bread(arg.resId);
         //面包开始掉落的初始位置
         var startY = -display.height;
         display.x = display.width / 2;
@@ -291,9 +289,13 @@ var Game = (function (_super) {
     Game.prototype.release = function () {
         this.removeConstraint();
         this.removePaws();
+        if (this.target) {
+            this.target.displays[0].cry();
+        }
     };
     Game.prototype.showResult = function (target) {
         if (target) {
+            target.displays[0].stopSmile();
             console.log(target.displayName, target.bundleId);
         }
         else {
@@ -319,6 +321,8 @@ var Game = (function (_super) {
                         this.hooker.goUp();
                         //如果有抓中
                         if (target) {
+                            //给抓中的面包一个笑脸
+                            target.displays[0].smile();
                             //如果没有中奖，则给个概率是在底部释放还是抓子升起一半时释放
                             if (this.award.length === 0) {
                                 if (Math.random() > .2) {
@@ -344,8 +348,10 @@ var Game = (function (_super) {
             this.updateDisplay();
         }, this);
         this.addEventListener("startGame", function (e) {
-            this.hooker.goDown();
-            this.hooker.dispatchEvent(new egret.Event('startGame'));
+            if (this.hooker.isEnabled()) {
+                this.hooker.goDown();
+                this.hooker.dispatchEvent(new egret.Event('startGame'));
+            }
         }, this);
         this.world.on('impact', function (e) {
             crBody = _this.constraintBody;

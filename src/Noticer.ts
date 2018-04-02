@@ -13,7 +13,7 @@ class Noticer extends egret.Sprite {
     private onAddToStage(event: egret.Event) {
         this.noticeText = new egret.TextField();
         this.noticeText.text = '';
-        this.noticeText.size = 35;
+        this.noticeText.size = 32;
         this.noticeText.width = 580;
         this.noticeText.textAlign = 'center';
         this.noticeText.textColor = 0xffffff;

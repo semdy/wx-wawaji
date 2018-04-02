@@ -24,8 +24,6 @@ var AwardDlg = (function (_super) {
         alphaMask.graphics.endFill();
         this.addChild(alphaMask);
         var awardSpr = new egret.Sprite();
-        awardSpr.x = 40;
-        awardSpr.y = 150;
         var awardBg = Utils.createBitmapByName('award_bg_png');
         awardSpr.addChild(awardBg);
         this.hint = new egret.TextField();
@@ -52,11 +50,27 @@ var AwardDlg = (function (_super) {
         this.scrollView.width = 474;
         this.scrollView.height = 260;
         awardSpr.addChild(this.scrollView);
+        awardSpr.x = 40 + awardSpr.width / 2;
+        awardSpr.y = 150 + awardSpr.height / 2;
+        awardSpr.anchorOffsetX = awardSpr.width / 2;
+        awardSpr.anchorOffsetY = awardSpr.height / 2;
+        awardSpr.scaleX = 0.5;
+        awardSpr.scaleY = 0.5;
         this.addChild(awardSpr);
+        this.awardSpr = awardSpr;
     };
     AwardDlg.prototype.setData = function (awardData) {
         this.dataList = awardData;
         this.setScrollViewContent();
+    };
+    AwardDlg.prototype.show = function () {
+        this.visible = true;
+        egret.Tween.get(this.awardSpr).to({ scaleX: 1, scaleY: 1 }, 500, egret.Ease.backOut);
+    };
+    AwardDlg.prototype.hide = function () {
+        this.awardSpr.scaleX = 0.5;
+        this.awardSpr.scaleY = 0.5;
+        this.visible = false;
     };
     AwardDlg.prototype.setScrollViewContent = function () {
         this.scrollView.removeContent();

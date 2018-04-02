@@ -77,6 +77,9 @@ var Hooker = (function (_super) {
     Hooker.prototype.enable = function () {
         this._canMove = true;
     };
+    Hooker.prototype.isEnabled = function () {
+        return this._canMove;
+    };
     Hooker.prototype.initEvents = function () {
         var _this = this;
         var isLeft = true;
