@@ -95,7 +95,7 @@ var Main = (function (_super) {
         };
         this._openid = Utils.getQueryString('openid');
         this.wxShare();
-        this.loadResource().then(function (_) {
+        this.loadResource().then(function () {
             _this._sourceReady = true;
             if (_this._authReady) {
                 _this.runGame();
@@ -103,16 +103,10 @@ var Main = (function (_super) {
         });
         auth.launch();
         auth.ready(function () {
-            //判断用户是否关注公众号
-            if (storage.local.get("_isFollowed")) {
-                _this.AuthReady();
-            }
-            else {
-                var qrDialog = document.createElement("div");
-                qrDialog.style.cssText = 'position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.8);z-index:1000;';
-                qrDialog.innerHTML = '<div style="position:absolute;left:50%;top:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);"><img src="resource/assets/qrcode.png"/></div>';
-                document.body.appendChild(qrDialog);
-            }
+            _this.AuthReady();
+        });
+        auth.error(function () {
+            Utils.showQrcode();
         });
     };
     Main.prototype.AuthReady = function () {

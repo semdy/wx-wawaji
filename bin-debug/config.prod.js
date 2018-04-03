@@ -21,7 +21,7 @@ var URLObj = (function () {
     var hostname = location.hostname;
     var uname = Utils.getQueryString('uname') || 'zaofans';
     if (hostname === 'localhost' || /^192\.168\.\d+\.\d+/.test(hostname)) {
-        hostname = "www.zaofans.com"; //"192.168.45.104:8080";
+        hostname = "wx.withwheat.com"; //"192.168.45.104:8080";
         isLocal = true;
     }
     var APPID_MAP = {

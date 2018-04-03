@@ -14,7 +14,7 @@
 		"bin-debug/AwardItem.js",
 		"bin-debug/Bread.js",
 		"bin-debug/Button.js",
-		"bin-debug/config.js",
+		"bin-debug/config.prod.js",
 		"bin-debug/FailDlg.js",
 		"bin-debug/Game.js",
 		"bin-debug/Hooker.js",

@@ -1,9 +1,15 @@
 var auth = (function () {
     var authReady = function () { };
+    var authError = function () { };
     //进入web系统
-    function gotoApp() {
+    function gotoApp(isReady) {
         setTimeout(function () {
-            authReady();
+            if (isReady) {
+                authReady();
+            }
+            else {
+                authError();
+            }
         });
     }
     //判断缓存是否存在（city,default address和user）
@@ -192,12 +198,12 @@ var auth = (function () {
                 if (isFollowed) {
                     requireUserInfo(function () {
                         requireUserAuth(function () {
-                            gotoApp();
+                            gotoApp(true);
                         });
                     });
                 }
                 else {
-                    gotoApp();
+                    gotoApp(false);
                 }
             });
         });
@@ -216,6 +222,9 @@ var auth = (function () {
         },
         ready: function (callback) {
             authReady = callback;
+        },
+        error: function (callback) {
+            authError = callback;
         },
         refreshUserAuth: refreshUserAuth
     };

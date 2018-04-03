@@ -79,6 +79,12 @@ var Utils = (function () {
             return false;
         }
     };
+    Utils.showQrcode = function () {
+        var qrDialog = document.createElement("div");
+        qrDialog.style.cssText = 'position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,.8);z-index:20000;';
+        qrDialog.innerHTML = '<div style="position:absolute;left:50%;top:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);"><img src="resource/assets/qrcode.png"/></div>';
+        document.body.appendChild(qrDialog);
+    };
     Utils.factor = 50;
     return Utils;
 }());
