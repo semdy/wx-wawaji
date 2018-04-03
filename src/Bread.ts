@@ -20,16 +20,16 @@ class Bread extends egret.Sprite {
         this.face = Utils.createBitmapByName(this.faceName);
         this.face.width = display.width * 0.6;
         this.face.height = display.height * 0.6;
-        this.face.x = display.width/2;
-        this.face.y = display.height/2;
-        this.face.anchorOffsetX = this.face.width/2;
-        this.face.anchorOffsetY = this.face.height/2;
-        
+        this.face.x = display.width / 2;
+        this.face.y = display.height / 2;
+        this.face.anchorOffsetX = this.face.width / 2;
+        this.face.anchorOffsetY = this.face.height / 2;
+
         this.addChild(display);
         this.addChild(this.face);
 
         this.timer = new egret.Timer(500);
-        this.timer.addEventListener(egret.TimerEvent.TIMER, function(event: egret.TimerEvent){
+        this.timer.addEventListener(egret.TimerEvent.TIMER, function (event: egret.TimerEvent) {
             if (this.faceEven) {
                 this.face.texture = RES.getRes("smile2_png");
             } else {
@@ -40,7 +40,7 @@ class Bread extends egret.Sprite {
     }
 
     private getFaceName(): string {
-        let faceNum: number = 1 + Math.floor(Math.random()*(10 - 1));
+        let faceNum: number = 1 + Math.floor(Math.random() * (10 - 1));
         return `face0${faceNum}_png`;
     }
 

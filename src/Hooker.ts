@@ -36,7 +36,7 @@ class Hooker extends egret.Sprite {
         this.paws.addChild(this.rightLeg);
         this.paws.addChild(Utils.createBitmapByName('machine_02_png', 23, -400));
         this.addChild(this.paws);
-        this.addChild(Utils.createBitmapByName('machine_top_png'));
+        //this.addChild(Utils.createBitmapByName('machine_top_png'));
 
         this.initEvents();
     }

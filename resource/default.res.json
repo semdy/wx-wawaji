@@ -1,7 +1,7 @@
 {
 	"groups":[
 	{
-		"keys":"circle-close_png,fail_bg_png,gift_btn_png,left_leg_png,machine_02_png,machine_top_png,main_title_png,point_bg_png,price_bg_png,right_leg_png,rule_bg_png,rule_btn_png,shareIcon_png,top_roof_png,award_bg_png,award_item_bg_png,bg_jpg,bread01_png,bread02_png,bread03_png,bread04_png,bread05_png,bread06_png,bread07_png,bread08_png,bread09_png,bread10_png,button_go_png,button_go_0_png,face01_png,face02_png,face03_png,face04_png,face05_png,face06_png,face07_png,face08_png,face09_png,smile1_png,smile2_png",
+		"keys":"circle-close_png,fail_bg_png,gift_btn_png,left_leg_png,machine_02_png,main_title_png,point_bg_png,price_bg_png,right_leg_png,rule_bg_png,rule_btn_png,shareIcon_png,top_roof_png,award_bg_png,award_item_bg_png,bg_jpg,bread01_png,bread02_png,bread03_png,bread04_png,bread05_png,bread06_png,bread07_png,bread08_png,bread09_png,bread10_png,button_go_png,button_go_0_png,face01_png,face02_png,face03_png,face04_png,face05_png,face06_png,face07_png,face08_png,face09_png,smile1_png,smile2_png",
 		"name":"preload"
 	},
 	{
@@ -33,11 +33,6 @@
 		"name":"machine_02_png",
 		"type":"image",
 		"url":"assets/machine_02.png"
-	},
-	{
-		"name":"machine_top_png",
-		"type":"image",
-		"url":"assets/machine_top.png"
 	},
 	{
 		"name":"main_title_png",
