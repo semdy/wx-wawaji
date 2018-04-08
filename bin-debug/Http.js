@@ -12,7 +12,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 var Http = (function () {
     function Http() {
     }
-    Http.prototype.request = function (options) {
+    Http.request = function (options) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             var xhr = new egret.HttpRequest();
@@ -35,7 +35,7 @@ var Http = (function () {
             }, _this);
         });
     };
-    Http.prototype._parseData = function (data, processData) {
+    Http._parseData = function (data, processData) {
         if (data === void 0) { data = {}; }
         if (!processData)
             return JSON.stringify(data);
@@ -46,10 +46,10 @@ var Http = (function () {
         return params.join("&");
     };
     Http.get = function (url, data, cfg) {
-        return new Http().request(__assign({ url: url, method: 'GET', data: data }, cfg));
+        return Http.request(__assign({ url: url, method: 'GET', data: data }, cfg));
     };
     Http.post = function (url, data, cfg) {
-        return new Http().request(__assign({ url: url, method: 'POST', data: data }, cfg));
+        return Http.request(__assign({ url: url, method: 'POST', data: data }, cfg));
     };
     return Http;
 }());

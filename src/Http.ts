@@ -11,7 +11,7 @@ interface xhrOptions extends xhrBaseOptions {
 }
 
 class Http {
-    public request(options: xhrOptions): Promise<any> {
+    public static request(options: xhrOptions): Promise<any> {
         return new Promise((resolve, reject) => {
             let xhr = new egret.HttpRequest();
             options.headers = {
@@ -38,7 +38,7 @@ class Http {
         })
     }
 
-    private _parseData(data: object = {}, processData: boolean): string {
+    private static _parseData(data: object = {}, processData: boolean): string {
         if (!processData) return JSON.stringify(data);
         let params: Array<string> = [];
         for (let i in data) {
@@ -48,7 +48,7 @@ class Http {
     }
 
     public static get(url: string, data?: object, cfg?: xhrBaseOptions): Promise<any> {
-        return new Http().request({
+        return Http.request({
             url: url,
             method: 'GET',
             data: data,
@@ -57,7 +57,7 @@ class Http {
     }
 
     public static post(url: string, data?: object, cfg?: xhrBaseOptions): Promise<any> {
-        return new Http().request({
+        return Http.request({
             url: url,
             method: 'POST',
             data: data,
