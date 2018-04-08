@@ -7,7 +7,8 @@ interface xhrBaseOptions {
 interface xhrOptions extends xhrBaseOptions {
     url: string
     data: object
-    method: string
+    method: string,
+    cache: boolean
 }
 
 class Http {
@@ -18,16 +19,16 @@ class Http {
                 "Content-Type": "application/x-www-form-urlencoded",
                 ...options.headers
             }
-            options = { method: 'GET', processData: true, dataType: 'json', ...options }
+            options = { method: 'GET', processData: true, cache: true, dataType: 'json', ...options }
             const method: string = options.method.toLocaleLowerCase();
-            const queryParams: string = method === 'get' ? `?${this._parseData(options.data, true)}` : ""
+            const queryParams: string = method === 'get' ? `?${this._parseData(options.data, options.cache, true)}` : ""
 
             xhr.responseType = egret.HttpResponseType.TEXT;
             xhr.open(options.url + queryParams, method === 'get' ? egret.HttpMethod.GET : egret.HttpMethod.POST);
             for (let i in options.headers) {
                 xhr.setRequestHeader(i, options.headers[i]);
             }
-            xhr.send(method === 'get' ? null : this._parseData(options.data, options.processData));
+            xhr.send(method === 'get' ? null : this._parseData(options.data, true, options.processData));
             xhr.addEventListener(egret.Event.COMPLETE, function (event: egret.Event) {
                 var request = <egret.HttpRequest>event.currentTarget;
                 resolve(options.dataType === 'json' ? JSON.parse(request.response) : request.response);
@@ -38,11 +39,14 @@ class Http {
         })
     }
 
-    private static _parseData(data: object = {}, processData: boolean): string {
+    private static _parseData(data: object = {}, cache, processData: boolean): string {
         if (!processData) return JSON.stringify(data);
         let params: Array<string> = [];
         for (let i in data) {
             params.push(`${i}=${data[i]}`);
+        }
+        if (!cache) {
+            params.push(`_ = ${Date.now() + Math.random() * 1e18}`);
         }
         return params.join("&");
     }
