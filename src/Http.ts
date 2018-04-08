@@ -2,13 +2,13 @@ interface xhrBaseOptions {
     headers?: object
     dataType?: string
     processData?: boolean
+    cache?: boolean
 }
 
 interface xhrOptions extends xhrBaseOptions {
     url: string
     data: object
-    method: string,
-    cache: boolean
+    method: string
 }
 
 class Http {

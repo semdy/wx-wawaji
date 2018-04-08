@@ -17,15 +17,15 @@ var Http = (function () {
         return new Promise(function (resolve, reject) {
             var xhr = new egret.HttpRequest();
             options.headers = __assign({ "Content-Type": "application/x-www-form-urlencoded" }, options.headers);
-            options = __assign({ method: 'GET', processData: true, dataType: 'json' }, options);
+            options = __assign({ method: 'GET', processData: true, cache: true, dataType: 'json' }, options);
             var method = options.method.toLocaleLowerCase();
-            var queryParams = method === 'get' ? "?" + _this._parseData(options.data, true) : "";
+            var queryParams = method === 'get' ? "?" + _this._parseData(options.data, options.cache, true) : "";
             xhr.responseType = egret.HttpResponseType.TEXT;
             xhr.open(options.url + queryParams, method === 'get' ? egret.HttpMethod.GET : egret.HttpMethod.POST);
             for (var i in options.headers) {
                 xhr.setRequestHeader(i, options.headers[i]);
             }
-            xhr.send(method === 'get' ? null : _this._parseData(options.data, options.processData));
+            xhr.send(method === 'get' ? null : _this._parseData(options.data, true, options.processData));
             xhr.addEventListener(egret.Event.COMPLETE, function (event) {
                 var request = event.currentTarget;
                 resolve(options.dataType === 'json' ? JSON.parse(request.response) : request.response);
@@ -35,13 +35,16 @@ var Http = (function () {
             }, _this);
         });
     };
-    Http._parseData = function (data, processData) {
+    Http._parseData = function (data, cache, processData) {
         if (data === void 0) { data = {}; }
         if (!processData)
             return JSON.stringify(data);
         var params = [];
         for (var i in data) {
             params.push(i + "=" + data[i]);
+        }
+        if (!cache) {
+            params.push("_ = " + (Date.now() + Math.random() * 1e18));
         }
         return params.join("&");
     };
