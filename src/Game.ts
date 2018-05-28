@@ -181,7 +181,7 @@ class Game extends egret.Sprite {
 
         //添加长方形刚体的显示对象
         let display: Bread = new Bread(arg.resId);
-
+        
         //面包开始掉落的初始位置
         let startY = -display.height;
 

@@ -1,17 +1,17 @@
 var URLObj = (function () {
     var URLObj = {
-        urlHost: "http://{hostname}/zaofans",
-        siloHost: "https://silo.withwheat.com",
-        shareUrl: "http://{hostname}/OrderUI/activity/activitys/wawaji",
-        weixinapiURL: "http://{hostname}/weixin/open-api",
-        weixinAuthUser: "https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2F{hostname}%2FOrderUI%2Factivity%2Factivitys%2Fwawaji%2Findex.html?uname={uname}&response_type=code&scope=snsapi_base&state=123456#wechat_redirect",
+        urlHost: "http://{hostname}/zaofans_wheat",
+        siloHost: 'https://dev.withwheat.wang/silo/h5',
+        shareUrl: "http://{hostname}/OrderUI-wheat/activity/activitys/wawaji",
+        weixinapiURL: "http://{hostname}/weixin_wheat/open-api",
+        weixinAuthUser: "https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2F{hostname}%2FOrderUI-wheat%2Factivity%2Factivitys%2Fwawaji%2Findex.html?uname={uname}&response_type=code&scope=snsapi_base&state=123456#wechat_redirect",
         Config: {
             urls: {
                 userinfo: '/usercenter/user/info',
                 buyrecord: '/user/buy/record/get',
                 shareReward: '/user/reward/share/151',
                 authToken: '/silo/user/auth/create',
-                shareIcon: 'http://wx.withwheat.com/OrderUI/activity/activitys/wawaji/resource/assets/shareIcon.png'
+                shareIcon: 'http://www.zaofans.com/OrderUI-wheat/activity/activitys/wawaji/resource/assets/shareIcon.png'
             },
             uname: 'zaofans',
             useCache: true
@@ -21,11 +21,11 @@ var URLObj = (function () {
     var hostname = location.hostname;
     var uname = Utils.getQueryString('uname') || 'zaofans';
     if (hostname === 'localhost' || /^192\.168\.\d+\.\d+/.test(hostname)) {
-        hostname = "wx.withwheat.com"; //"192.168.45.104:8080";
+        hostname = "www.zaofans.com"; //"192.168.45.104:8080";
         isLocal = true;
     }
     var APPID_MAP = {
-        zaofans: "wxa3c1a88324d35d1f",
+        zaofans: "wxbbc70552f97b9141",
         wuhan: "wx904143829f0b0d1b",
         nanjing: "wx9746bb172d736a0c",
         dalian: "wx610b5c9cf75bdf07",
@@ -36,7 +36,7 @@ var URLObj = (function () {
         tianjin: "wxbb9dc835c34e9918",
         gertz: "wxc97360c6205ff452",
         joyseed: "wxc61ea7696e402f22",
-        default: "wxa3c1a88324d35d1f"
+        default: "wxbbc70552f97b9141"
     };
     for (var i in URLObj) {
         if (typeof URLObj[i] === 'string') {
