@@ -343,7 +343,7 @@ var Main = (function (_super) {
         }, this);
         this.pointDlg.addEventListener('close', function (e) {
             var _this = this;
-            //用积分兑换游戏券
+            //用麦点兑换游戏券
             this.pointDlg.button.touchEnabled = false;
             service.asset.exchange().then(function (res) {
                 _this.pointDlg.button.touchEnabled = true;
@@ -355,7 +355,7 @@ var Main = (function (_super) {
                     _this.game.reStart();
                 }
                 else {
-                    Utils.toast("您当前积分不足，请去商城购物或者通过其它方式获取更多积分");
+                    Utils.toast("您当前麦点不足，请去商城购物或者通过其它方式获取更多麦点");
                 }
             });
         }, this);

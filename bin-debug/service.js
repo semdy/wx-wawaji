@@ -53,7 +53,7 @@ var service;
             return common.request('/asset/drop/2205', { dropKey: "drop-free-game-ticket" });
         };
         asset.remain = function () {
-            return common.request('/asset/remain/2211', { dropKey: "drop-free-game-ticket" });
+            return common.request('/asset/remain/2211');
         };
         asset.exchange = function () {
             return common.request('/asset/exchange/2213', { exchange: "point-to-game-ticket" });

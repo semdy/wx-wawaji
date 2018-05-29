@@ -317,7 +317,7 @@ class Main extends egret.DisplayObjectContainer {
         }, this);
 
         this.pointDlg.addEventListener('close', function (e) {
-            //用积分兑换游戏券
+            //用麦点兑换游戏券
             this.pointDlg.button.touchEnabled = false;
             service.asset.exchange().then(res => {
                 this.pointDlg.button.touchEnabled = true;
@@ -328,7 +328,7 @@ class Main extends egret.DisplayObjectContainer {
                     this.startButton.touchEnabled = true;
                     this.game.reStart();
                 } else {
-                    Utils.toast("您当前积分不足，请去商城购物或者通过其它方式获取更多积分");
+                    Utils.toast("您当前麦点不足，请去商城购物或者通过其它方式获取更多麦点");
                 }
             })
         }, this);
