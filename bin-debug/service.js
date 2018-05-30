@@ -97,4 +97,22 @@ var service;
     }());
     service.game = game;
     __reflect(game.prototype, "service.game");
+    var share = (function () {
+        function share() {
+        }
+        share.post = function () {
+            return common.request('/spread/107', {
+                content: "MINI_GAME_51024"
+            });
+        };
+        share.drop = function (spreadId, isNewUser) {
+            return common.request('/spread/109', {
+                spreadId: spreadId,
+                isNewUser: isNewUser
+            });
+        };
+        return share;
+    }());
+    service.share = share;
+    __reflect(share.prototype, "service.share");
 })(service || (service = {}));

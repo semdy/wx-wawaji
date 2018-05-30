@@ -94,7 +94,7 @@ var Main = (function (_super) {
             egret.ticker.resume();
         };
         this._openid = Utils.getQueryString('openid');
-        this.wxShare();
+        this.initShare();
         this.loadResource().then(function () {
             _this._sourceReady = true;
             if (_this._authReady) {
@@ -111,11 +111,14 @@ var Main = (function (_super) {
     };
     Main.prototype.AuthReady = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var res;
+            var spreadId, isNewUser, res;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        spreadId = Utils.getQueryString('spreadId');
+                        isNewUser = !storage.local.get("_isFollowed");
                         service.asset.drop();
+                        spreadId && service.share.drop(spreadId, isNewUser);
                         return [4 /*yield*/, service.asset.remain()];
                     case 1:
                         res = _a.sent();
@@ -191,7 +194,7 @@ var Main = (function (_super) {
             weixinApiService.authorize();
             weixinApiService.exec('onMenuShareTimeline', {
                 title: '原麦山丘抓面包抽奖啦！',
-                link: URLObj.shareUrl + "/share.html?redirectUri=" + encodeURIComponent(URLObj.weixinAuthUser),
+                link: URLObj.shareUrl + "/share.html?redirectUri=" + encodeURIComponent(URLObj.weixinAuthUser.replace("{spreadId}", this.spreadId)),
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function (res) {
                 },
@@ -204,7 +207,7 @@ var Main = (function (_super) {
             weixinApiService.exec('onMenuShareAppMessage', {
                 title: '原麦山丘抓面包抽奖啦！',
                 desc: '快来试试手气，赢取麦点优惠券！',
-                link: URLObj.shareUrl + "/share.html?redirectUri=" + encodeURIComponent(URLObj.weixinAuthUser),
+                link: URLObj.shareUrl + "/share.html?redirectUri=" + encodeURIComponent(URLObj.weixinAuthUser.replace("{spreadId}", this.spreadId)),
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function () {
                 },
@@ -212,6 +215,26 @@ var Main = (function (_super) {
                 }
             });
         }
+    };
+    Main.prototype.initShare = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, service.share.post()];
+                    case 1:
+                        res = _a.sent();
+                        if (res.protocError === 0) {
+                            this.spreadId = res.spreadId;
+                        }
+                        else {
+                            this.spreadId = '';
+                        }
+                        this.wxShare();
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     Main.prototype.showAward = function (data) {
         this.setChildIndex(this.awardDlg, 100);

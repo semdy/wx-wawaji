@@ -9,8 +9,8 @@
 		"physics/bin/physics/physics.js"
 	],
 	"game": [
+		"bin-debug/Utils.js",
 		"bin-debug/Main.js",
-		"bin-debug/AwardDlg.js",
 		"bin-debug/AwardItem.js",
 		"bin-debug/Bread.js",
 		"bin-debug/Button.js",
@@ -20,7 +20,7 @@
 		"bin-debug/Hooker.js",
 		"bin-debug/Http.js",
 		"bin-debug/LoadingUI.js",
-		"bin-debug/Utils.js",
+		"bin-debug/AwardDlg.js",
 		"bin-debug/Noticer.js",
 		"bin-debug/Platform.js",
 		"bin-debug/PointDlg.js",

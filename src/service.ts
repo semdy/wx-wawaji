@@ -67,4 +67,19 @@ module service {
                 });
         }
     }
+    export class share {
+        public static post(): Promise<any> {
+            return common.request('/spread/107',
+                {
+                    content: "MINI_GAME_51024"
+                });
+        }
+        public static drop(spreadId: string, isNewUser: boolean): Promise<any> {
+            return common.request('/spread/109',
+                {
+                    spreadId,
+                    isNewUser
+                });
+        }
+    }
 }

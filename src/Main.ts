@@ -44,6 +44,7 @@ class Main extends egret.DisplayObjectContainer {
     private loadingView: any;
     private _sourceReady: boolean;
     private _authReady: boolean;
+    private spreadId: string
 
     public constructor() {
         super();
@@ -72,7 +73,7 @@ class Main extends egret.DisplayObjectContainer {
 
         this._openid = Utils.getQueryString('openid');
 
-        this.wxShare();
+        this.initShare();
         this.loadResource().then(() => {
             this._sourceReady = true;
             if (this._authReady) {
@@ -90,7 +91,12 @@ class Main extends egret.DisplayObjectContainer {
     }
 
     private async AuthReady() {
+        let spreadId = Utils.getQueryString('spreadId');
+        let isNewUser = !storage.local.get("_isFollowed");
+
         service.asset.drop();
+        spreadId && service.share.drop(spreadId, isNewUser);
+
         let res = await service.asset.remain();
         this.remainAmount = this._getGameAmount(res.remain);
         this._authReady = true;
@@ -141,7 +147,7 @@ class Main extends egret.DisplayObjectContainer {
             weixinApiService.authorize();
             weixinApiService.exec('onMenuShareTimeline', {
                 title: '原麦山丘抓面包抽奖啦！',
-                link: `${URLObj.shareUrl}/share.html?redirectUri=${encodeURIComponent(URLObj.weixinAuthUser)}`,
+                link: `${URLObj.shareUrl}/share.html?redirectUri=${encodeURIComponent(URLObj.weixinAuthUser.replace("{spreadId}", this.spreadId))}`,
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function (res) {
                 },
@@ -155,7 +161,7 @@ class Main extends egret.DisplayObjectContainer {
             weixinApiService.exec('onMenuShareAppMessage', {
                 title: '原麦山丘抓面包抽奖啦！',
                 desc: '快来试试手气，赢取麦点优惠券！',
-                link: `${URLObj.shareUrl}/share.html?redirectUri=${encodeURIComponent(URLObj.weixinAuthUser)}`,
+                link: `${URLObj.shareUrl}/share.html?redirectUri=${encodeURIComponent(URLObj.weixinAuthUser.replace("{spreadId}", this.spreadId))}`,
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function () {
                 },
@@ -163,6 +169,16 @@ class Main extends egret.DisplayObjectContainer {
                 }
             });
         }
+    }
+
+    private async initShare (): Promise<any> {
+        let res = await service.share.post();
+        if (res.protocError === 0) {
+            this.spreadId = res.spreadId;
+        } else {
+            this.spreadId = '';
+        }
+        this.wxShare();
     }
 
     public showAward(data: Array<object>): void {

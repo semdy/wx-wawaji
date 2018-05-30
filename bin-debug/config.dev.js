@@ -4,7 +4,7 @@ var URLObj = (function () {
         siloHost: 'https://dev.withwheat.wang/silo/h5',
         shareUrl: "http://{hostname}/OrderUI-wheat/activity/activitys/wawaji",
         weixinapiURL: "http://{hostname}/weixin_wheat/open-api",
-        weixinAuthUser: "https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2F{hostname}%2FOrderUI-wheat%2Factivity%2Factivitys%2Fwawaji%2Findex.html?uname={uname}&response_type=code&scope=snsapi_base&state=123456#wechat_redirect",
+        weixinAuthUser: "https://open.weixin.qq.com/connect/oauth2/authorize?appid={appid}&redirect_uri=http%3A%2F%2F{hostname}%2FOrderUI-wheat%2Factivity%2Factivitys%2Fwawaji%2Findex.html?uname={uname}&spreadId={spreadId}&response_type=code&scope=snsapi_base&state=123456#wechat_redirect",
         Config: {
             urls: {
                 userinfo: '/usercenter/user/info',
