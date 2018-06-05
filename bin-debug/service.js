@@ -50,7 +50,13 @@ var service;
         function asset() {
         }
         asset.drop = function () {
-            return common.request('/asset/drop/2205', { dropKey: "drop-free-game-ticket" });
+            return common.request('/asset/drop/2205', {
+                dropKey: "drop-free-game-ticket",
+                dropMore: [
+                    "drop-free-game-ticket-daily",
+                    "drop-free-game-ticket-daily-extra"
+                ]
+            });
         };
         asset.remain = function () {
             return common.request('/asset/remain/2211');
@@ -102,7 +108,7 @@ var service;
         }
         share.post = function () {
             return common.request('/spread/107', {
-                content: "MINI_GAME_51024"
+                content: "MINI_GAME_51021"
             });
         };
         share.drop = function (spreadId, isNewUser) {

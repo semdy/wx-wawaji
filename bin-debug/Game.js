@@ -379,7 +379,7 @@ var Game = (function (_super) {
             //钩子下降时创建爪子刚体
             this.createConstraintBody();
         }, this);
-        //钩子下降到最底部
+        //钩子下降到最底部且没有抓到任何物体
         this.hooker.addEventListener('reachdown', function () {
             this.getGameResult(null);
         }, this);
@@ -389,6 +389,7 @@ var Game = (function (_super) {
             //创建爪子，稳固已抓到的面包
             setTimeout(this.createConstraintBody.bind(this), 1000);
         }, this);
+        //抓子升到顶部
         this.hooker.addEventListener('reachup', function () {
             this.removePaws();
             this.showResult(this.target);

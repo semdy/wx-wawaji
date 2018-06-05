@@ -50,6 +50,7 @@ class Main extends egret.DisplayObjectContainer {
         super();
         this._sourceReady = false;
         this._authReady = false;
+        this.spreadId = '';
         this.addEventListener(egret.Event.ADDED_TO_STAGE, this.onAddToStage, this);
     }
 
@@ -73,7 +74,8 @@ class Main extends egret.DisplayObjectContainer {
 
         this._openid = Utils.getQueryString('openid');
 
-        this.initShare();
+        this.wxShare();
+
         this.loadResource().then(() => {
             this._sourceReady = true;
             if (this._authReady) {
@@ -96,6 +98,8 @@ class Main extends egret.DisplayObjectContainer {
 
         service.asset.drop();
         spreadId && service.share.drop(spreadId, isNewUser);
+
+        this.initShare();
 
         let res = await service.asset.remain();
         this.remainAmount = this._getGameAmount(res.remain);

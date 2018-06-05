@@ -77,6 +77,7 @@ var Main = (function (_super) {
         var _this = _super.call(this) || this;
         _this._sourceReady = false;
         _this._authReady = false;
+        _this.spreadId = '';
         _this.addEventListener(egret.Event.ADDED_TO_STAGE, _this.onAddToStage, _this);
         return _this;
     }
@@ -94,7 +95,7 @@ var Main = (function (_super) {
             egret.ticker.resume();
         };
         this._openid = Utils.getQueryString('openid');
-        this.initShare();
+        this.wxShare();
         this.loadResource().then(function () {
             _this._sourceReady = true;
             if (_this._authReady) {
@@ -119,6 +120,7 @@ var Main = (function (_super) {
                         isNewUser = !storage.local.get("_isFollowed");
                         service.asset.drop();
                         spreadId && service.share.drop(spreadId, isNewUser);
+                        this.initShare();
                         return [4 /*yield*/, service.asset.remain()];
                     case 1:
                         res = _a.sent();

@@ -398,7 +398,7 @@ class Game extends egret.Sprite {
             this.createConstraintBody();
         }, this);
 
-        //钩子下降到最底部
+        //钩子下降到最底部且没有抓到任何物体
         this.hooker.addEventListener('reachdown', function () {
             this.getGameResult(null);
         }, this);
@@ -410,6 +410,7 @@ class Game extends egret.Sprite {
             setTimeout(this.createConstraintBody.bind(this), 1000);
         }, this);
 
+        //抓子升到顶部
         this.hooker.addEventListener('reachup', function () {
             this.removePaws();
             this.showResult(this.target);

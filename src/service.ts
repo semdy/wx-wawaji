@@ -30,7 +30,13 @@ module service {
     }
     export class asset {
         public static drop(): Promise<any> {
-            return common.request('/asset/drop/2205', { dropKey: "drop-free-game-ticket" });
+            return common.request('/asset/drop/2205', {
+                dropKey: "drop-free-game-ticket",
+                dropMore: [
+                    "drop-free-game-ticket-daily",
+                    "drop-free-game-ticket-daily-extra"
+                ]
+            });
         }
         public static remain(): Promise<any> {
             return common.request('/asset/remain/2211');
@@ -71,10 +77,10 @@ module service {
         public static post(): Promise<any> {
             return common.request('/spread/107',
                 {
-                    content: "MINI_GAME_51024"
+                    content: "MINI_GAME_51021"
                 });
         }
-        public static drop(spreadId: string, isNewUser: boolean): Promise<any> {
+        public static drop(spreadId: String, isNewUser: boolean): Promise<any> {
             return common.request('/spread/109',
                 {
                     spreadId,
