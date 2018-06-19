@@ -50,7 +50,7 @@ var auth = (function () {
       return
     }
 
-    var codeFromUrl = Utils.getQueryString('code');
+    var codeFromUrl = Utils.getQueryString('code') || storage.session.get('__code');
     var codeFromLocal = storage.local.get('_code');
 
     debug('code:' + codeFromUrl);
@@ -70,6 +70,7 @@ var auth = (function () {
         var wxopenid = message["openid"];
         storage.local.set("_openid", wxopenid);
         storage.local.set("_code", codeFromUrl);
+        storage.session.remove("__code");
         callback();
       });
     } else {

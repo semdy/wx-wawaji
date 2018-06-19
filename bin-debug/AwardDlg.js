@@ -47,7 +47,7 @@ var AwardDlg = (function (_super) {
         this.scrollView = new egret.ScrollView();
         this.scrollView.y = 425;
         this.scrollView.x = 95;
-        this.scrollView.width = 474;
+        this.scrollView.width = 476;
         this.scrollView.height = 260;
         awardSpr.addChild(this.scrollView);
         awardSpr.x = 40 + awardSpr.width / 2;

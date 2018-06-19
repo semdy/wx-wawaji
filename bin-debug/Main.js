@@ -103,12 +103,22 @@ var Main = (function (_super) {
             }
         });
         auth.launch();
+        window.addEventListener('message', function (e) {
+            var data = e.data;
+            if (data.code) {
+                storage.session.set("__code", data.code);
+            }
+            auth.launch();
+        }, false);
         auth.ready(function () {
             _this.AuthReady();
         });
         auth.error(function () {
             Utils.showQrcode();
         });
+    };
+    Main.prototype.createProxy = function () {
+        var ;
     };
     Main.prototype.AuthReady = function () {
         return __awaiter(this, void 0, void 0, function () {

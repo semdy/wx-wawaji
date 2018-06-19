@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="never" name="referrer">
+  <title></title>
+</head>
+
+<body>
+  <script>
+    function getParameters() {
+      var ret = {};
+      var result = window.location.search.substr(1);
+      result && result.split("&").forEach(function(item){
+        item = item.split("=");
+        ret[item[0]] = item[1];
+      });
+      return ret;
+    }
+
+    window.parent.postMessage(JSON.stringify(getParameters()), "*");
+  </script>
+</body>
+
+</html>

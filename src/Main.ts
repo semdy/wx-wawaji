@@ -74,6 +74,9 @@ class Main extends egret.DisplayObjectContainer {
 
         this._openid = Utils.getQueryString('openid');
 
+        if (!Utils.isMiniGame()) {
+            this.createProxy();
+        }
         this.wxShare();
 
         this.loadResource().then(() => {
@@ -84,12 +87,35 @@ class Main extends egret.DisplayObjectContainer {
         });
 
         auth.launch();
+
+        window.addEventListener('message', function (e) {
+            const data = JSON.parse(e.data);
+            if (data.code) {
+                storage.session.set("__code", data.code);
+            }
+            auth.launch();
+        }, false);
+
         auth.ready(() => {
             this.AuthReady();
         });
         auth.error(() => {
             Utils.showQrcode();
         });
+    }
+
+    private createProxy() {
+        var ifr = document.createElement("iframe");
+        ifr.style.position = 'absolute';
+        ifr.style.visibility = 'hidden';
+        ifr.style.pointerEvents = 'none';
+        ifr.style.border = '0';
+        ifr.setAttribute("frameborder", "0");
+        ifr.setAttribute("width", "0");
+        ifr.setAttribute("height", "0");
+        ifr.setAttribute("allowtransparency", "true");
+        ifr.setAttribute("src", URLObj.weixinAuthUser);
+        document.body.appendChild(ifr);
     }
 
     private async AuthReady() {
@@ -151,7 +177,7 @@ class Main extends egret.DisplayObjectContainer {
             weixinApiService.authorize();
             weixinApiService.exec('onMenuShareTimeline', {
                 title: '原麦山丘抓面包抽奖啦！',
-                link: `${URLObj.shareUrl}/share.html?redirectUri=${encodeURIComponent(URLObj.weixinAuthUser.replace("{spreadId}", this.spreadId))}`,
+                link: `${URLObj.shareUrl}/share.html?redirectUri=${URLObj.weixinAuthUser.replace('{spreadId}', this.spreadId)}`,
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function (res) {
                 },
@@ -165,7 +191,7 @@ class Main extends egret.DisplayObjectContainer {
             weixinApiService.exec('onMenuShareAppMessage', {
                 title: '原麦山丘抓面包抽奖啦！',
                 desc: '快来试试手气，赢取麦点优惠券！',
-                link: `${URLObj.shareUrl}/share.html?redirectUri=${encodeURIComponent(URLObj.weixinAuthUser.replace("{spreadId}", this.spreadId))}`,
+                link: `${URLObj.shareUrl}/share.html?redirectUri=${URLObj.weixinAuthUser.replace('{spreadId}', this.spreadId)}`,
                 imgUrl: URLObj.Config.urls.shareIcon,
                 success: function () {
                 },
@@ -175,7 +201,7 @@ class Main extends egret.DisplayObjectContainer {
         }
     }
 
-    private async initShare (): Promise<any> {
+    private async initShare(): Promise<any> {
         let res = await service.share.post();
         if (res.protocError === 0) {
             this.spreadId = res.spreadId;
